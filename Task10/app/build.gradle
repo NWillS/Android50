@@ -16,6 +16,16 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    lintOptions {
+        // lintファイルを直指定するため
+        lintConfig rootProject.file("lint.xml")
+        // Errorを出力するため
+        abortOnError true
+        // エラー箇所を出力するため
+        noLines false
+        // エラー内容を出力するため
+        textReport true
+    }
 }
 
 dependencies {
