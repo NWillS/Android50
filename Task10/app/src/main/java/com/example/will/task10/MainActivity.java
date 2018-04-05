@@ -1,9 +1,8 @@
-package com.example.will.task09;
+package com.example.will.task10;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-@SuppressWarnings("UnnecessarilyQualifiedInnerClassAccess")
 public class MainActivity extends AppCompatActivity {
 
     @Override
