@@ -19,6 +19,7 @@ public class MainActivity extends AppCompatActivity {
         doIf(x,y);
         doIfElse(x,y);
         doIfElseIf(x,y);
+        doTernaryOperator(x,y);
         doWhile();
         doDoWhile();
         doFor();
@@ -50,6 +51,12 @@ public class MainActivity extends AppCompatActivity {
         } else if(x + y == 5){
             Log.i("System.out/IfElseIf","x + y = " + (x+y));
         }
+    }
+
+    private void doTernaryOperator(Integer x, Integer y) {
+//        三項演算子
+        Integer max = (x < y) ? y : x;
+        Log.i("System.out/Ternary","max = " + max);
     }
 
     private void doWhile(){
