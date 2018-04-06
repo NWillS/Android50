@@ -10,16 +10,16 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Boolean testBool = true;
+        boolean testBool = true;
         Log.d("logTestBool", "testBool = " + testBool);
 
         String testString = "HelloWorld!";
         Log.d("logTestStr", "testString = " + testString);
 
-        Integer testInteger = 123;
+        int testInteger = 123;
         Log.d("logTestInt", "testInteger = " + testInteger);
 
-        Double testDouble = 123.45;
+        double testDouble = 123.45;
         Log.d("logTestDouble", "testDouble = " + testDouble);
     }
 }
