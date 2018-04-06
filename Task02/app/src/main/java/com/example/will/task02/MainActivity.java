@@ -18,18 +18,36 @@ public class MainActivity extends AppCompatActivity {
         arr.add("Hello");
         arr.add("World!");
         arr.add("123");
-        Log.d("logTestArr","arr = " + arr);
+        for (String str:arr) {
+            Log.d("logTestArr", str);
+        }
 
         HashMap<String, Integer> map = new HashMap<>();
         map.put("one", 1);
         map.put("two", 2);
         map.put("three", 3);
-        Log.d("logTestMap","map = " + map);
+
+        for(String key:map.keySet()){
+            Log.d("logTestMap/Key",key);
+        }
+        for(Integer num:map.values()){
+            Log.d("logTestMap/Values",num.toString());
+        }
+        map.put("two",4);
+        Log.d("logTestMap/Two","two = " + map.get("two"));
 
         HashSet<String> set = new HashSet<>();
         set.add("A");
+        set.add("A");
+        set.add("A");
+        set.add("B");
         set.add("B");
         set.add("C");
-        Log.d("logTestSet","set = " + set);
+
+        Log.d("logTestSet/Num","set.num = " + set.size());
+        for(String str:set){
+            Log.d("logTestSet",str);
+        }
+
     }
 }
