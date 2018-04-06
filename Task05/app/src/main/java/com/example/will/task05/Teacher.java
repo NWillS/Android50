@@ -2,13 +2,13 @@ package com.example.will.task05;
 
 class Teacher {
     private String name;
-    private Integer age;
-    private Boolean gender;
-    private Double baseSalary;
+    private int age;
+    private boolean gender;
+    private double baseSalary;
 
     Teacher(){}
 
-    Teacher(String name, Integer age, Boolean gender, Double baseSalary){
+    Teacher(String name, int age, boolean gender, double baseSalary){
         this.name = name;
         this.age = age;
         this.gender = gender;
@@ -18,13 +18,13 @@ class Teacher {
     public String getName(){
         return this.name;
     }
-    public Integer getAge(){
+    public int getAge(){
         return this.age;
     }
-    public Boolean getGender(){
+    public boolean getGender(){
         return this.gender;
     }
-    Double getBaseSalary(){
+    double getBaseSalary(){
         return this.baseSalary;
     }
 }
