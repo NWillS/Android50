@@ -2,12 +2,12 @@ package com.example.will.task06;
 
 @SuppressWarnings("UnnecessaryThis")
 class Designer extends Employee {
-    private final Integer numberOfProjects;
-    Double computeYearlyPay(){
+    private int numberOfProjects;
+    double computeYearlyPay(){
         return (getBaseSalary()+ (double)(10000 * this.numberOfProjects));
     }
 
-    Designer(String name, Integer age, Boolean gender, String address, Double baseSalary, Integer numberOfProjects){
+    public Designer(String name, int age, boolean gender, String address, double baseSalary, int numberOfProjects) {
         super(name, age, gender, address, baseSalary);
         this.numberOfProjects = numberOfProjects;
     }

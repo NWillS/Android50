@@ -2,19 +2,19 @@ package com.example.will.task06;
 
 @SuppressWarnings({"FieldCanBeLocal", "UnnecessaryThis"})
 abstract class Employee {
-    private final String name;
-    private final Integer age;
-    private final Boolean gender;
-    private final String address;
-    private final Double baseSalary;
+    private String name;
+    private int age;
+    private boolean gender;
+    private String address;
+    private double baseSalary;
 
-    abstract Double computeYearlyPay();
+    abstract double computeYearlyPay();
 
-    Double getBaseSalary(){
+    double getBaseSalary(){
         return this.baseSalary;
     }
 
-    Employee(String name, Integer age, Boolean gender, String address, Double baseSalary){
+    public Employee(String name, int age, boolean gender, String address, double baseSalary) {
         this.name = name;
         this.age = age;
         this.gender = gender;

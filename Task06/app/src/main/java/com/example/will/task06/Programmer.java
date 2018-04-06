@@ -2,10 +2,10 @@ package com.example.will.task06;
 
 @SuppressWarnings({"UnnecessaryThis", "MagicCharacter"})
 class Programmer extends Employee {
-    private final Integer numberOfProjects;
-    private final Character rank;
+    private int numberOfProjects;
+    private char rank;
 
-    private Integer getBonusByRank(){
+    private int getBonusByRank(){
         switch (this.rank){
             case 'A':
                 return 10000;
@@ -19,11 +19,11 @@ class Programmer extends Employee {
         }
     }
 
-    Double computeYearlyPay(){
+    double computeYearlyPay(){
         return getBaseSalary() + (double)(10000 * this.numberOfProjects) + getBonusByRank();
     }
 
-    Programmer(String name, Integer age, Boolean gender, String address, Double baseSalary, Integer numberOfProjects, Character rank){
+    public Programmer(String name, int age, boolean gender, String address, double baseSalary, int numberOfProjects, char rank) {
         super(name, age, gender, address, baseSalary);
         this.numberOfProjects = numberOfProjects;
         this.rank = rank;
