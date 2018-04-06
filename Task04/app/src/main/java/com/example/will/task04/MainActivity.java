@@ -2,6 +2,7 @@ package com.example.will.task04;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
         internship.add(member02);
 
         for(Account member : internship){
-            member.print();
+            Log.d("System.out/Info",member.getInfo());
         }
 
     }
