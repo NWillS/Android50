@@ -13,8 +13,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Integer x = 3;
-        Integer y = 2;
+        int x = 3;
+        int y = 2;
 
         doIf(x,y);
         doIfElse(x,y);
@@ -27,14 +27,14 @@ public class MainActivity extends AppCompatActivity {
         doSwitch();
 
     }
-    private void doIf(Integer x, Integer y){
+    private void doIf(int x, int y){
 //        if文
         if(x + y == 5){
             Log.i("System.out/If","if文の処理完了");
         }
     }
 
-    private void doIfElse(Integer x, Integer y){
+    private void doIfElse(int x, int y){
         //        if~else文
         if(x +  y < 4){
             Log.i("System.out/IfElseTrue","x + y =" + (x+y));
@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void doIfElseIf(Integer x, Integer y){
+    private void doIfElseIf(int x, int y){
 //        if~else if文
         if(x + y < 6){
             Log.i("System.out/IfElseIfTrue","x + y = " + (x+y));
@@ -53,15 +53,15 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void doTernaryOperator(Integer x, Integer y) {
+    private void doTernaryOperator(int x, int y) {
 //        三項演算子
-        Integer max = (x < y) ? y : x;
+        int max = (x < y) ? y : x;
         Log.i("System.out/Ternary","max = " + max);
     }
 
     private void doWhile(){
         //        while文
-        Integer i = 0;
+        int i = 0;
         while(i < 5){
             Log.i("System.out/While","i = " + i);
             i++;
@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
     private void doDoWhile(){
 
 //        do while文
-        Integer i = 0;
+        int i = 0;
         do{
             Log.i("System.out/DoWhile","i = " + i);
             i++;
@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void doFor(){
         //        for文
-        for(Integer j = 0; j < 5; j++){
+        for(int j = 0; j < 5; j++){
             Log.i("System.out/For","j = " + j);
         }
     }
@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void doSwitch(){
-        Integer x = 3;
+        int x = 3;
         //        switch文
         switch (x % 2) {
             case 0:
