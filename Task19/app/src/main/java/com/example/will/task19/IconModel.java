@@ -2,11 +2,12 @@ package com.example.will.task19;
 
 import android.graphics.drawable.Drawable;
 
-public class IconModel {
+@SuppressWarnings({"CanBeFinal", "FieldMayBeFinal", "UnnecessaryThis"})
+class IconModel {
     private Drawable drawable;
     private String text;
 
-    public IconModel(Drawable drawable, String text) {
+    IconModel(Drawable drawable, String text) {
         this.drawable = drawable;
         this.text = text;
     }

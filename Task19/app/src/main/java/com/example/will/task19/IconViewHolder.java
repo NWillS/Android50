@@ -5,10 +5,11 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+@SuppressWarnings({"CanBeFinal", "UnnecessarilyQualifiedInnerClassAccess", "FieldMayBeFinal", "UnnecessaryThis"})
 public class IconViewHolder extends RecyclerView.ViewHolder {
-    ImageView imageView;
-    String text;
-    public IconViewHolder(final View itemView) {
+    private ImageView imageView;
+    private String text;
+    public IconViewHolder(View itemView) {
         super(itemView);
         this.imageView = (ImageView) itemView.findViewById(R.id.imageView);
 
@@ -17,9 +18,9 @@ public class IconViewHolder extends RecyclerView.ViewHolder {
             public void onClick(View v) {
 
 
-                int position = Integer.parseInt(imageView.getTag().toString());
+                int position = Integer.parseInt(IconViewHolder.this.imageView.getTag().toString());
 
-                Toast.makeText(v.getContext(), text , Toast.LENGTH_SHORT).show();
+                Toast.makeText(v.getContext(), IconViewHolder.this.text, Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -27,5 +28,13 @@ public class IconViewHolder extends RecyclerView.ViewHolder {
 
     public void setText(String text) {
         this.text = text;
+    }
+
+    public ImageView getImageView() {
+        return this.imageView;
+    }
+
+    public String getText() {
+        return this.text;
     }
 }

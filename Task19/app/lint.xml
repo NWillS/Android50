@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lint>
+    <issue id="IconDuplicates">
+        <ignore path="src/main/res/drawable/icon_green.png" />
+        <ignore path="src/main/res/mipmap-xxxhdpi/ic_launcher.png" />
+        <ignore path="src/main/res/mipmap-xxxhdpi/ic_launcher.png" />
+        <ignore path="src/main/res/mipmap-xxxhdpi/ic_launcher.png" />
+    </issue>
+    <issue id="IconLocation">
+        <ignore path="src/main/res/drawable/icon_black.png" />
+        <ignore path="src/main/res/drawable/icon_blue.png" />
+        <ignore path="src/main/res/drawable/icon_blue_green.png" />
+        <ignore path="src/main/res/drawable/icon_brown.png" />
+        <ignore path="src/main/res/drawable/icon_gray.png" />
+        <ignore path="src/main/res/drawable/icon_green.png" />
+        <ignore path="src/main/res/drawable/icon_green.png" />
+        <ignore path="src/main/res/drawable/icon_light_green.png" />
+        <ignore path="src/main/res/drawable/icon_pink.png" />
+    </issue>
+</lint>
