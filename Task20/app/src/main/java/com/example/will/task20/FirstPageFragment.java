@@ -24,7 +24,7 @@ public class FirstPageFragment extends Fragment {
         TextView textView = (TextView) view.findViewById(R.id.textView);
         TextView pageView = (TextView) view.findViewById(R.id.currentPage);
         
-        textView.setText("FirstPage");
+        textView.setText(R.string.firstPageText);
         pageView.setText("1/3");
 
     }

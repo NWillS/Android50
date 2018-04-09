@@ -1,11 +1,8 @@
 <resources>
     <string name="app_name">Task20</string>
+    <string name="firstPageText">FirstPage</string>
+    <string name="secondPageText">SecondPage</string>
+    <string name="thirdPageText">ThirdPage</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="first_page">1ページ目</string>
-    <string name="firstPageText">１ページ目です。</string>
-    <string name="second_page">2ページ目</string>
-    <string name="secondPageText">２ページ目です</string>
-    <string name="third_page">3ページ目</string>
-    <string name="thirdPageText">３ページ目です</string>
 </resources>
