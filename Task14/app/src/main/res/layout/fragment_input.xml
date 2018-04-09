@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Input">
+    tools:context=".InputFragment">
 
     <!-- TODO: Update blank fragment layout -->
 
@@ -17,14 +17,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:ems="10"
-            android:hint="入力してください" />
+            android:singleLine="true"
+            android:hint="@string/pleaseInput"
+            android:inputType="" />
 
         <Button
             android:id="@+id/button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Button" />
+            android:text="@string/button" />
     </LinearLayout>
 </FrameLayout>
