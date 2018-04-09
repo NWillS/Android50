@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -10,8 +11,9 @@
 
     <FrameLayout
         android:id="@+id/frameLayout"
-        android:layout_width="250dp"
-        android:layout_height="350dp"
+        android:layout_width="207dp"
+        android:layout_height="307dp"
+        android:layout_centerInParent="true"
         android:background="#E0FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -21,30 +23,31 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="top|center_horizontal"
+            android:gravity="center_horizontal"
             android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
                 android:layout_marginTop="50dp"
-                android:gravity="top|center"
+                android:gravity="center"
                 android:orientation="horizontal">
 
                 <ImageView
                     android:layout_width="50dp"
                     android:layout_height="50dp"
-                    app:srcCompat="@drawable/facebook_icon"
-                    android:contentDescription="@string/facebook" />
+                    android:contentDescription="@string/facebook"
+                    app:srcCompat="@drawable/facebook_icon" />
 
                 <ImageView
                     android:layout_width="50dp"
                     android:layout_height="50dp"
-                    android:layout_marginTop="5dp"
-                    app:srcCompat="@drawable/googleplus_licon"
-                    android:contentDescription="@string/googleplus" />
+                    android:layout_marginTop="2dp"
+                    android:contentDescription="@string/googleplus"
+                    android:paddingBottom="3dp"
+                    app:srcCompat="@drawable/googleplus_licon" />
             </LinearLayout>
 
             <LinearLayout
@@ -56,14 +59,14 @@
                 <ImageView
                     android:layout_width="50dp"
                     android:layout_height="50dp"
-                    app:srcCompat="@drawable/instagram_icon"
-                    android:contentDescription="@string/instagram" />
+                    android:contentDescription="@string/instagram"
+                    app:srcCompat="@drawable/instagram_icon" />
 
                 <ImageView
                     android:layout_width="50dp"
                     android:layout_height="50dp"
-                    app:srcCompat="@drawable/youtube_icon"
-                    android:contentDescription="@string/youtube" />
+                    android:contentDescription="@string/youtube"
+                    app:srcCompat="@drawable/youtube_icon" />
 
             </LinearLayout>
 
@@ -115,11 +118,9 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginStart="8dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="50dp"
         android:text="@string/STV"
         android:textColor="#FFF"
         android:textSize="20sp"
@@ -129,6 +130,4 @@
         app:layout_constraintStart_toStartOf="parent" />
 
 
-
-
-</android.support.constraint.ConstraintLayout>
+</RelativeLayout>
