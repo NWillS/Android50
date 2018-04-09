@@ -22,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
         list.add("1\n2\n3\n4\n5\n6\n7\n8\n9");
         list.add("1\n2\n3\n4\n5\n6\n7\n8\n9\n10");
         list.add("1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11");
+        list.add("1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12");
 
         RecyclerView rv = (RecyclerView) findViewById(R.id.testRecyclerView);
         TestRecycleViewAdapter adapter = new TestRecycleViewAdapter(this.createDataSet());
