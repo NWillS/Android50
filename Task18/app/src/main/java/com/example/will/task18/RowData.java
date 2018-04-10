@@ -1,22 +1,29 @@
 package com.example.will.task18;
 
+import android.graphics.drawable.Drawable;
+
 class RowData {
-    private String title;
+    private Drawable image;
     private String detail;
 
-    public void setTitle(String title) {
-        this.title = title;
+    public RowData(Drawable image, String detail) {
+        this.image = image;
+        this.detail = detail;
     }
 
     public void setDetail(String detail) {
         this.detail = detail;
     }
 
-    public String getTitle() {
-        return this.title;
+    public void setImage(Drawable image) {
+        this.image = image;
     }
 
     public String getDetail() {
         return this.detail;
+    }
+
+    public Drawable getImage() {
+        return this.image;
     }
 }

@@ -1,5 +1,6 @@
 package com.example.will.task18;
 
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,7 +24,7 @@ class TestRecycleViewAdapter extends RecyclerView.Adapter<TestViewHolder> {
 
     @Override
     public void onBindViewHolder(TestViewHolder holder, int position) {
-        holder.titleView.setText(list.get(position).getTitle());
+        holder.imageView.setImageDrawable(list.get(position).getImage());
         holder.detailView.setText(list.get(position).getDetail());
     }
 
