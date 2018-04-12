@@ -14,6 +14,7 @@ class TodoRecyclerViewAdapter extends Adapter<TodoViewHolder> {
     @SuppressWarnings("InterfaceWithOnlyOneDirectInheritor")
     interface TodoAdapterListener{
         void selectedTodo(RowData todo);
+        void onLongClicked(int position);
     }
 
     private TodoAdapterListener listener;
@@ -42,6 +43,17 @@ class TodoRecyclerViewAdapter extends Adapter<TodoViewHolder> {
                 if(listener != null){
                     listener.selectedTodo(todo);
                 }
+            }
+        });
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                int position = holder.getAdapterPosition();
+                if(listener != null){
+                    listener.onLongClicked(position);
+                    return true;
+                }
+                return false;
             }
         });
     }
