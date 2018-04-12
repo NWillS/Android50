@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Task14</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="pleaseInput">入力してください</string>
+    <string name="button">Button</string>
+    <string name="willOutput">ここに表示されます</string>
+</resources>
