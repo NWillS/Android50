@@ -7,7 +7,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-@SuppressWarnings({"UnqualifiedFieldAccess", "SerializableDeserializableClassInSecureContext", "SerializableHasSerializationMethods", "serial", "DuplicateStringLiteralInspection"})
+@SuppressWarnings({"UnqualifiedFieldAccess", "SerializableDeserializableClassInSecureContext", "SerializableHasSerializationMethods", "serial", "DuplicateStringLiteralInspection", "SimpleDateFormatWithoutLocale"})
 class RowData implements Serializable{
     private int todoID;
     private String title;

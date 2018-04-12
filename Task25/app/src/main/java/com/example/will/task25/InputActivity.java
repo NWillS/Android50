@@ -21,7 +21,7 @@ import java.util.Date;
 
 
 
-@SuppressWarnings({"UnqualifiedFieldAccess", "UnnecessarilyQualifiedInnerClassAccess", "UnqualifiedInnerClassAccess", "DuplicateStringLiteralInspection"})
+@SuppressWarnings({"UnqualifiedFieldAccess", "UnnecessarilyQualifiedInnerClassAccess", "UnqualifiedInnerClassAccess", "DuplicateStringLiteralInspection", "SimpleDateFormatWithoutLocale"})
 public class InputActivity extends AppCompatActivity {
     private RowData todo;
     private String status;
