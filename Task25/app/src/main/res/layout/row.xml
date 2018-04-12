@@ -5,11 +5,13 @@
     android:layout_height="wrap_content">
 
     <LinearLayout
+        android:id="@+id/linear"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:paddingLeft="5dp"
-        android:paddingRight="5dp">
+        android:paddingRight="5dp"
+        tools:ignore="UselessParent">
 
         <TextView
             android:id="@+id/rowTitleTextView"

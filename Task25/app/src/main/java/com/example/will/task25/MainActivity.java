@@ -7,18 +7,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
 import com.example.will.task25.FeedReaderContract.FeedEntry;
+import com.example.will.task25.TodoRecyclerViewAdapter.TodoAdapterListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class MainActivity extends AppCompatActivity {
-    private List<RowData> todoList;
+@SuppressWarnings({"UnqualifiedFieldAccess", "UnnecessarilyQualifiedInnerClassAccess", "UnqualifiedInnerClassAccess", "TryFinallyCanBeTryWithResources", "DuplicateStringLiteralInspection"})
+public class MainActivity extends AppCompatActivity implements TodoAdapterListener{
     private TodoRecyclerViewAdapter adapter;
 
     @Override
@@ -30,15 +30,12 @@ public class MainActivity extends AppCompatActivity {
 
         RecyclerView rv = (RecyclerView) findViewById(R.id.todoListView);
         adapter = new TodoRecyclerViewAdapter();
+        adapter.setListener(this);
 
         LinearLayoutManager llm = new LinearLayoutManager(this);
-
         rv.addItemDecoration(new DividerItemDecoration(this));
-
         rv.setHasFixedSize(true);
-
         rv.setLayoutManager(llm);
-
         rv.setAdapter(adapter);
 
         Button addButton = (Button) findViewById(R.id.addButton);
@@ -46,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplication(), InputActivity.class);
+                intent.putExtra("status","newTodo");
                 startActivity(intent);
             }
         });
@@ -55,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        todoList = new ArrayList<>();
+        List<RowData> todoList = new ArrayList<>();
         //rawQueryメソッドでデータを取得
         DatabaseHelper dbHelper = new DatabaseHelper(this);
         SQLiteDatabase db = dbHelper.getReadableDatabase();
@@ -65,7 +63,6 @@ public class MainActivity extends AppCompatActivity {
                     " order by " + FeedEntry.COLUMN_LIMIT_DATE + " asc ";
             Cursor cursor = db.rawQuery(sql, null);
             //TextViewに表示
-            StringBuilder text = new StringBuilder();
             while (cursor.moveToNext()) {
                 int todoID = cursor.getInt(0);
                 String title = cursor.getString(1);
@@ -75,11 +72,20 @@ public class MainActivity extends AppCompatActivity {
                 RowData todo = new RowData(todoID,title,content,limit);
                 todoList.add(todo);
             }
-            Log.i("System.out",text.toString());
+            cursor.close();
         } finally {
+
             db.close();
         }
         adapter.setTodoList(todoList);
         adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void selectedTodo(RowData todo) {
+        Intent intent = new Intent(getApplication(), InputActivity.class);
+        intent.putExtra("status","updateTodo");
+        intent.putExtra("todo",todo);
+        startActivity(intent);
     }
 }

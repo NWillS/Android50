@@ -1,9 +1,8 @@
 package com.example.will.task25;
 
-import android.provider.BaseColumns;
-
 class FeedReaderContract {
 
+    @SuppressWarnings("PublicInnerClass")
     public static class FeedEntry {
 
         public static final String TABLE_TODO             = "tr_todo";
