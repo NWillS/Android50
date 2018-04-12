@@ -9,6 +9,7 @@ import android.os.Bundle;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings({"UnnecessarilyQualifiedInnerClassAccess", "ConstantConditions"})
 public class MainActivity extends AppCompatActivity {
 
     @Override

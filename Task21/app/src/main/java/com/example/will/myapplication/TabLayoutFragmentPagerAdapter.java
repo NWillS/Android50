@@ -1,13 +1,15 @@
 package com.example.will.myapplication;
 
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-public class TabLayoutFragmentPagerAdapter extends FragmentPagerAdapter {
+@SuppressWarnings({"CanBeFinal", "FieldMayBeFinal", "UnqualifiedFieldAccess"})
+class TabLayoutFragmentPagerAdapter extends FragmentPagerAdapter {
     private CharSequence[] tabTitles = {"Apple", "Android"};
 
-    public TabLayoutFragmentPagerAdapter(FragmentManager fm) {
+    TabLayoutFragmentPagerAdapter(FragmentManager fm) {
         super(fm);
     }
 
@@ -16,6 +18,7 @@ public class TabLayoutFragmentPagerAdapter extends FragmentPagerAdapter {
         return tabTitles[position];
     }
 
+    @Nullable
     @Override
     public Fragment getItem(int position) {
         switch (position) {
