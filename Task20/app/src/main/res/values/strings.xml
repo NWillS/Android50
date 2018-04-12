@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Task20</string>
+    <string name="firstPageText">FirstPage</string>
+    <string name="secondPageText">SecondPage</string>
+    <string name="thirdPageText">ThirdPage</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+</resources>
