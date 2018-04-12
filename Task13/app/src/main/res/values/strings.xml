@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Task13</string>
+    <string name="user_name">User Name</string>
+    <string name="password">Password</string>
+    <string name="login">LOGIN</string>
+    <string name="STV">スマートテック・ベンチャーズ</string>
+    <string name="facebook">facebook</string>
+    <string name="googleplus">googlePlus</string>
+    <string name="instagram">instagram</string>
+    <string name="youtube">youtube</string>
+</resources>
