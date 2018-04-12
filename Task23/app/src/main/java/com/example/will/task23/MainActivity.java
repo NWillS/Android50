@@ -7,8 +7,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+@SuppressWarnings("UnnecessarilyQualifiedInnerClassAccess")
 public class MainActivity extends AppCompatActivity {
-    private int REQUEST_CODE = 10;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplication(), SubActivity.class);
-                intent.putExtra("textStr",editText.getText().toString());
+                intent.putExtra(SubActivity.TEXT_STR,editText.getText().toString());
                 startActivity(intent);
             }
         });
