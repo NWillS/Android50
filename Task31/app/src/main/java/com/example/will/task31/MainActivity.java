@@ -1,6 +1,5 @@
 package com.example.will.task31;
 
-import android.graphics.Bitmap;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,7 +8,6 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.example.will.task31.api.LivedoorWeatherWebService;
 import com.example.will.task31.api.model.Forecast;
 import com.example.will.task31.api.model.Weather;
@@ -22,10 +20,11 @@ import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+@SuppressWarnings({"UnqualifiedFieldAccess", "UnnecessarilyQualifiedInnerClassAccess", "VariableNotUsedInsideIf"})
 public class MainActivity extends AppCompatActivity {
-    public static final String TAG = "MainActivity";
-    public static final String API_URL = "http://weather.livedoor.com/forecast/webservice/json/";
-    private Handler handler = new Handler();
+    private static final String TAG = "MainActivity";
+    private static final String API_URL = "http://weather.livedoor.com/forecast/webservice/json/";
+    private final Handler handler = new Handler();
     private ForecastRecyclerViewAdapter adapter;
     private TextView description;
 
@@ -48,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    void getForecast(){
+    private void getForecast(){
         try {
             Thread thread = new Thread(new Runnable() {
 
@@ -103,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
 
             thread.start();
 
-        } catch (Exception e) {
+        } catch (RuntimeException e) {
             Log.e("System.err",e.getMessage());
         }
     }

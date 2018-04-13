@@ -38,7 +38,8 @@
             android:layout_weight="0.5"
             android:gravity="center"
             android:paddingLeft="10dp"
-            tools:text="天気" />
+            tools:text="天気"
+            tools:ignore="RtlHardcoded,RtlSymmetry" />
 
     </LinearLayout>
 

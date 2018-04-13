@@ -1,5 +1,6 @@
 package com.example.will.task31.api.model;
 
+@SuppressWarnings("PublicField")
 public class Image {
     public String width;
     public String link;
