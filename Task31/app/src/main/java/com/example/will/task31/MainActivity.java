@@ -1,47 +1,54 @@
 package com.example.will.task31;
 
+import android.graphics.Bitmap;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
+import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.will.task31.api.LivedoorWeatherWebService;
 import com.example.will.task31.api.model.Forecast;
 import com.example.will.task31.api.model.Weather;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener,ForecastDialogFragment.ForecastDialogFragmentListener{
+public class MainActivity extends AppCompatActivity {
     public static final String TAG = "MainActivity";
     public static final String API_URL = "http://weather.livedoor.com/forecast/webservice/json/";
     private Handler handler = new Handler();
+    private ForecastRecyclerViewAdapter adapter;
+    private TextView description;
 
-    private Button button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        button = (Button) findViewById(R.id.button);
-        button.setOnClickListener(this);
+        RecyclerView recyclerView = (RecyclerView)findViewById(R.id.recyclerView);
+        description = (TextView) findViewById(R.id.descriptionTextView);
+        adapter = new ForecastRecyclerViewAdapter();
+
+        LinearLayoutManager llm = new LinearLayoutManager(this);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(llm);
+        recyclerView.setAdapter(adapter);
+
+        getForecast();
+
     }
 
-
-    @Override
-    public void onClick(View view) {
-        ForecastDialogFragment fd = new ForecastDialogFragment();
-        fd.setListener(this);
-        fd.show(getFragmentManager(),"forecast");
-    }
-
-    void getForecast(final int position){
+    void getForecast(){
         try {
             Thread thread = new Thread(new Runnable() {
 
@@ -73,16 +80,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         @Override
                         public void run() {
                             if (temp_weather != null) {
-                                if(temp_weather.forecasts.size() > position) {
+                                description.setText(temp_weather.description.text);
+                                List<ForecastData> forecasts = new ArrayList<>();
+                                for(int position = 0; position < temp_weather.forecasts.size();position++){
                                     Forecast forecast = temp_weather.forecasts.get(position);
-                                    String text = temp_weather.location.city + "の" +
-                                            forecast.dateLabel + "の天気は" + forecast.telop + "です。";
-                                    Log.i("System.out", text);
+                                    String date = forecast.dateLabel;
+                                    String telop = forecast.telop;
+                                    String iconUrl = forecast.image.url;
+
+                                    ForecastData forecastData = new ForecastData(date,telop,iconUrl);
+                                    forecasts.add(forecastData);
                                 }
-                                else {
-                                    String text = temp_weather.location.city + "その日の天気はまだわかりません。";
-                                    Log.i("System.out", text);
-                                }
+
+                                adapter.setForecasts(forecasts);
+                                adapter.notifyDataSetChanged();
+
                             }
                         }
                     });
@@ -96,8 +108,5 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    @Override
-    public void onClicked(int position) {
-        getForecast(position);
-    }
+
 }
