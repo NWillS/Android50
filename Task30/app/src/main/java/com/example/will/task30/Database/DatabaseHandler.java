@@ -84,7 +84,7 @@ public class DatabaseHandler {
 
         String sql = "select * from " + ToDoEntry.TABLE_TODO +
                 " where " + ToDoEntry.COLUMN_DELETE_FLG + " = 0" +
-                " order by " + ToDoEntry.COLUMN_LIMIT_DATE + " asc ";
+                " order by " + ToDoEntry.COLUMN_LIMIT_DATE + " desc ";
         Cursor cursor = db.rawQuery(sql, null);
         try {
             while (cursor.moveToNext()) {
