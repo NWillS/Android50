@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements TodoAdapterListen
         try {
             String sql = "select * from " + FeedEntry.TABLE_TODO +
                     " where " + FeedEntry.COLUMN_DELETE_FLG + " = 0" +
-                    " order by " + FeedEntry.COLUMN_LIMIT_DATE + " asc ";
+                    " order by " + FeedEntry.COLUMN_LIMIT_DATE + " desc ";
             Cursor cursor = db.rawQuery(sql, null);
             //TextViewに表示
             while (cursor.moveToNext()) {
