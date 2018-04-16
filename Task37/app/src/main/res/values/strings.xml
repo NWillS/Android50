@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Task37</string>
+    <string name="title">件名：</string>
+    <string name="content">内容：</string>
+    <string name="send">送信</string>
+    <string name="contentHint">本文を入力してください</string>
+    <string name="titleHint">件名</string>
+</resources>
