@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.example.will.task30.Database.DatabaseContract.ToDoEntry;
+import com.example.will.task30.ToDoEdit.DatabaseViewInterface;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -15,8 +16,9 @@ import java.util.Date;
 import java.util.List;
 
 public class DatabaseHandler {
-    
-    public static long insert(SQLiteDatabase db, String title, String content){
+
+
+    public static void insert(SQLiteDatabase db, String title, String content,DatabaseViewInterface databaseViewInterface){
         String nowDate = getNowDate();
         String limited = getLimitDateFrom(nowDate);
 
@@ -32,15 +34,20 @@ public class DatabaseHandler {
         try {
             ret = db.insert(ToDoEntry.TABLE_TODO, null, contentValues);
         } finally {
-            if(db.isOpen()) {
-                db.close();
-            }
+//            if(db.isOpen()) {
+//                db.close();
+//            }
+        }
+        if (ret != -1L){
+            databaseViewInterface.insertDatabaseSuccessfully();
+        }else {
+            databaseViewInterface.insertDatabaseFailed();
         }
 
-        return ret;
+        //return ret;
     }
 
-    public static int update(SQLiteDatabase db,int todoID, String title, String content){
+    public static void update(SQLiteDatabase db,int todoID, String title, String content,DatabaseViewInterface databaseViewInterface){
         String nowDate = getNowDate();
         String limited = getLimitDateFrom(nowDate);
 
@@ -58,15 +65,21 @@ public class DatabaseHandler {
 
             ret = db.update(ToDoEntry.TABLE_TODO,contentValues,whereClause,whereArgs);
         } finally {
-            if(db.isOpen()) {
-                db.close();
-            }
+//            if(db.isOpen()) {
+//                db.close();
+//            }
         }
 
-        return ret;
+        if (ret != -1L){
+            databaseViewInterface.insertDatabaseSuccessfully();
+        }else {
+            databaseViewInterface.insertDatabaseFailed();
+        }
+
+        //return ret;
     }
 
-    public static List<ToDoData> select(SQLiteDatabase db){
+    public static void select(SQLiteDatabase db,DatabaseViewInterface databaseViewInterface){
         List<ToDoData> todoList = new ArrayList<>();
 
         String sql = "select * from " + ToDoEntry.TABLE_TODO +
@@ -86,15 +99,13 @@ public class DatabaseHandler {
 
         } finally {
             cursor.close();
-            if(db.isOpen()) {
-                db.close();
-            }
         }
+        databaseViewInterface.selectedDatabaseSuccessfully(todoList);
 
-        return todoList;
+//        return todoList;
     }
 
-    public static int delete(SQLiteDatabase db,int todoID){
+    public static void delete(SQLiteDatabase db,int todoID,DatabaseViewInterface databaseViewInterface){
         ContentValues contentValues = new ContentValues();
         contentValues.put(ToDoEntry.COLUMN_DELETE_FLG, 1);
 
@@ -104,11 +115,16 @@ public class DatabaseHandler {
             String[] whereArgs = {String.valueOf(todoID)};
             ret = db.update(ToDoEntry.TABLE_TODO,contentValues, whereClause, whereArgs);
         } finally {
-            if(db.isOpen()) {
-                db.close();
-            }
+//            if(db.isOpen()) {
+//                db.close();
+//            }
         }
-        return ret;
+
+        if (ret != -1){
+            databaseViewInterface.insertDatabaseSuccessfully();
+        }else {
+            databaseViewInterface.insertDatabaseFailed();
+        }
     }
 
     private static String getNowDate(){

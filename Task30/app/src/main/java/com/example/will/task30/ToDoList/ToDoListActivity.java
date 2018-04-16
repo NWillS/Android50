@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -34,7 +35,7 @@ public class ToDoListActivity extends Activity implements ToDoListView,View.OnCl
         RecyclerView rv = (RecyclerView) findViewById(R.id.todoListView);
         adapter = new ToDoRecyclerViewAdapter();
         Button button = (Button) findViewById(R.id.addButton);
-        presenter = new ToDoListPresenterImpl(this);
+        presenter = new ToDoListPresenterImpl(new DatabaseHelper(this),this);
         findViewById(R.id.addButton).setOnClickListener(this);
 
         adapter.setListener((ToDoRecyclerViewAdapter.TodoAdapterListener) presenter);
@@ -63,12 +64,7 @@ public class ToDoListActivity extends Activity implements ToDoListView,View.OnCl
 
     @Override
     public void reloadList() {
-
-        DatabaseHelper dbHelper= new DatabaseHelper(this);
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-        todoList = DatabaseHandler.select(db);
-        adapter.setTodoList(todoList);
-        adapter.notifyDataSetChanged();
+        presenter.selectAll();
     }
 
     @Override
@@ -82,20 +78,31 @@ public class ToDoListActivity extends Activity implements ToDoListView,View.OnCl
     @Override
     public void showDeleteDialog(int position) {
         this.position = position;
+        Log.i("System.out", String.valueOf(position));
         DeleteDialogFragment dialogFragment = new DeleteDialogFragment();
         dialogFragment.setListener(this);
         dialogFragment.show(getFragmentManager(),"delete");
     }
 
     @Override
+    public void printToDoList(List<ToDoData> todoList) {
+        this.todoList = todoList;
+        adapter.setTodoList(this.todoList);
+        adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void insertSuccessfully() {
+        presenter.onResume();
+    }
+
+    @Override
+    public void insertFailed() {
+        Toast.makeText(getApplication(), "削除失敗", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
     public void onClickOk() {
-
-        DatabaseHelper dbHelper= new DatabaseHelper(this);
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-        if(DatabaseHandler.delete(db,todoList.get(position).getTodoID()) != -1){
-            Toast.makeText(getApplication(), "削除完了", Toast.LENGTH_SHORT).show();
-            reloadList();
-        }
-
+        presenter.deleteRow(todoList.get(position).getTodoID());
     }
 }

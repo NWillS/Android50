@@ -1,14 +1,26 @@
 package com.example.will.task30.ToDoList;
 
+import android.database.sqlite.SQLiteDatabase;
+
+import com.example.will.task30.Database.DatabaseHandler;
+import com.example.will.task30.Database.DatabaseHelper;
 import com.example.will.task30.Database.ToDoData;
+import com.example.will.task30.ToDoEdit.DatabaseViewInterface;
+
+import java.util.List;
 
 public class ToDoListPresenterImpl implements ToDoListPresenter,
-        ToDoRecyclerViewAdapter.TodoAdapterListener {
+        ToDoRecyclerViewAdapter.TodoAdapterListener,
+        DatabaseViewInterface{
 
     private ToDoListView toDoListView;
+    DatabaseHelper dbHelper;
+    SQLiteDatabase db;
 
-    public ToDoListPresenterImpl(ToDoListView toDoListView) {
+    public ToDoListPresenterImpl(DatabaseHelper dbHelper, ToDoListView toDoListView) {
         this.toDoListView = toDoListView;
+        this.dbHelper = dbHelper;
+        this.db = dbHelper.getWritableDatabase();
     }
 
     @Override
@@ -16,6 +28,16 @@ public class ToDoListPresenterImpl implements ToDoListPresenter,
         if (toDoListView != null){
             toDoListView.reloadList();
         }
+    }
+
+    @Override
+    public void selectAll() {
+        DatabaseHandler.select(db,this);
+    }
+
+    @Override
+    public void deleteRow(int todoID) {
+        DatabaseHandler.delete(db,todoID,this);
     }
 
 
@@ -33,4 +55,18 @@ public class ToDoListPresenterImpl implements ToDoListPresenter,
         }
     }
 
+    @Override
+    public void insertDatabaseSuccessfully() {
+        toDoListView.insertSuccessfully();
+    }
+
+    @Override
+    public void insertDatabaseFailed() {
+
+    }
+
+    @Override
+    public void selectedDatabaseSuccessfully(List<ToDoData> toDoDataList) {
+        toDoListView.printToDoList(toDoDataList);
+    }
 }
