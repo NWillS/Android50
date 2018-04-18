@@ -54,6 +54,19 @@ public class InputActivity extends AppCompatActivity {
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                String title = titleEditText.getText().toString();
+                if(title.isEmpty()){
+                    titleEditText.setError("Please enter title");
+                    return;
+                }
+
+                String content = contentEditText.getText().toString();
+
+                if(content.isEmpty()){
+                    contentEditText.setError("Please enter content");
+                    return;
+                }
+
                 DatabaseHelper databaseHelper = new DatabaseHelper(getApplication());
                 SQLiteDatabase db = databaseHelper.getWritableDatabase();
 
