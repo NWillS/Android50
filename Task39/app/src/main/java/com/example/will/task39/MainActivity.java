@@ -15,7 +15,6 @@ import android.widget.ImageView;
 import java.util.HashMap;
 import java.util.Map;
 
-@SuppressWarnings({"UnnecessarilyQualifiedInnerClassAccess", "ArrayLengthInLoopCondition", "UnqualifiedFieldAccess"})
 public class MainActivity extends AppCompatActivity {
     private ImageView imageView;
     private MyApplication app;

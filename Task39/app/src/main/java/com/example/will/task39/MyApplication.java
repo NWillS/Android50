@@ -3,7 +3,6 @@ package com.example.will.task39;
 import android.app.Application;
 import android.graphics.Bitmap;
 
-@SuppressWarnings({"UnqualifiedFieldAccess", "WeakerAccess"})
 public class MyApplication extends Application {
     private Bitmap obj;
 

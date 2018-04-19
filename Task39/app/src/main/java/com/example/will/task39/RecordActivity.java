@@ -30,7 +30,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
-@SuppressWarnings({"UnqualifiedFieldAccess", "UnnecessarilyQualifiedInnerClassAccess", "IfStatementWithTooManyBranches", "CanBeFinal", "OverlyComplexMethod", "ImplicitNumericConversion", "NumericCastThatLosesPrecision", "SuspiciousNameCombination", "ClassWithTooManyFields", "ContinueStatement", "OverlyComplexBooleanExpression", "DuplicateStringLiteralInspection", "UnqualifiedInnerClassAccess", "ReuseOfLocalVariable"})
+
 public class RecordActivity extends Activity {
 
     private Camera myCamera;
@@ -68,11 +68,11 @@ public class RecordActivity extends Activity {
                     int rad_y = radianToDegree(orientationValues[2]);
                     Matrix matrix = new Matrix();
                     if ((rad_y > -45 && rad_y <= 0) || (rad_y > 0 && rad_y <= 45)) {
-                        matrix.setRotate(90);
+                        matrix.setRotate(90.0F);
                     } else if (rad_y > 45 && rad_y <= 135) {
-                        matrix.setRotate(180);
+                        matrix.setRotate(180.0F);
                     } else if ((rad_y > 135 && rad_y <= 180) || (rad_y >= -180 && rad_y <= -135)) {
-                        matrix.setRotate(-90);
+                        matrix.setRotate(-90.0F);
                     } else if (rad_y > -135 && rad_y <= -45) {
                         matrix.setRotate(0);
                     }
@@ -263,11 +263,11 @@ public class RecordActivity extends Activity {
 
         // Cannot find the one match the aspect ratio, ignore the requirement
         if (optimalSize == null) {
-            minDiff = Double.MAX_VALUE;
+            double maxValue = Double.MAX_VALUE;
             for (Size size : sizes) {
-                if (Math.abs(size.height - h) < minDiff) {
+                if (Math.abs(size.height - h) < maxValue) {
                     optimalSize = size;
-                    minDiff = Math.abs(size.height - h);
+                    maxValue = Math.abs(size.height - h);
                 }
             }
         }
