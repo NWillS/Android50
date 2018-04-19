@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Task41</string>
+    <string name="image">image</string>
+    <string name="b">B</string>
+    <string name="g">G</string>
+    <string name="r">R</string>
+    <string name="a">A</string>
 </resources>
