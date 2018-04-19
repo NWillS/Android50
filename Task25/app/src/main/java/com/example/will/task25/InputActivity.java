@@ -32,6 +32,20 @@ public class InputActivity extends AppCompatActivity {
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                String title = titleEditText.getText().toString();
+                if(title.isEmpty()){
+                    titleEditText.setError("Please enter title");
+                    return;
+                }
+
+                String content = contentEditText.getText().toString();
+
+                if(content.isEmpty()){
+                    contentEditText.setError("Please enter content");
+                    return;
+                }
+
                 DatabaseHelper databaseHelper = new DatabaseHelper(getApplication());
                 SQLiteDatabase db = databaseHelper.getWritableDatabase();
 
@@ -39,8 +53,8 @@ public class InputActivity extends AppCompatActivity {
                 String limited = getLimitDateFrom(created);
 
                 ContentValues contentValues = new ContentValues();
-                contentValues.put(FeedEntry.COLUMN_TODO_TITLE,titleEditText.getText().toString());
-                contentValues.put(FeedEntry.COLUMN_TODO_CONTENTS,contentEditText.getText().toString());
+                contentValues.put(FeedEntry.COLUMN_TODO_TITLE,title);
+                contentValues.put(FeedEntry.COLUMN_TODO_CONTENTS,content);
                 contentValues.put(FeedEntry.COLUMN_CREATED,created);
                 contentValues.put(FeedEntry.COLUMN_MODIFIED,created);
                 contentValues.put(FeedEntry.COLUMN_LIMIT_DATE,limited);
