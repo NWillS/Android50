@@ -56,6 +56,9 @@ public class RecordActivity extends Activity {
                 public void onPictureTaken(byte[] data, Camera camera) {
                     ContentResolver resolver = getContentResolver();
 
+                    int svWidth = mySurfaceView.getHolder().getSurfaceFrame().width();
+                    int cWidth = camera.getParameters().getSupportedPreviewSizes().get(0).width;
+
                     // データを生成する
                     Bitmap tmp_bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
                     int width = tmp_bitmap.getWidth();
@@ -74,8 +77,14 @@ public class RecordActivity extends Activity {
                         matrix.setRotate(0);
                     }
 
+                    Log.i("Cam",width + " , " + height);
+
                     // 画像データを保存する
-                    Bitmap bitmap = Bitmap.createBitmap(tmp_bitmap, 0, 0, width, height, matrix, true);
+                    Bitmap temp_bitmap = Bitmap.createBitmap(tmp_bitmap, 0, 0, width, height, matrix, true);
+
+                    int temp_width = (height * svWidth) / cWidth ;
+                    Log.i("Cam", temp_width + " : " + width );
+                    Bitmap bitmap = Bitmap.createBitmap(temp_bitmap, 0, 0, temp_width, width, null, true);
 
                     MyApplication app = (MyApplication) getApplication();
                     app.setObj(bitmap);
