@@ -1,7 +1,7 @@
 package com.example.will.task45;
 
 import android.Manifest;
-import android.app.Service;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
@@ -11,11 +11,12 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.widget.TextView;
+import android.view.View;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 
 public class MainActivity extends AppCompatActivity implements LocationListener {
@@ -34,8 +35,14 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         Log.e(TAG, "onCreate");
         setContentView(R.layout.activity_main);
 
-        mLocationManager = (LocationManager) this.getSystemService(Service.LOCATION_SERVICE);
-        requestLocationUpdates();
+        mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+        findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                requestLocationUpdates();
+            }
+        });
     }
 
     // Called when the location has changed.
@@ -53,21 +60,23 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         switch (status) {
             case LocationProvider.OUT_OF_SERVICE:
                 // if the provider is out of service, and this is not expected to change in the near future.
-                String outOfServiceMessage = provider + "が圏外になっていて取得できません。";
+                String outOfServiceMessage = provider + " が圏外になっていて取得できません。";
                 showMessage(outOfServiceMessage);
                 break;
             case LocationProvider.TEMPORARILY_UNAVAILABLE:
                 // if the provider is temporarily unavailable but is expected to be available shortly.
-                String temporarilyUnavailableMessage = "一時的に" + provider + "が利用できません。もしかしたらすぐに利用できるようになるかもです。";
+                String temporarilyUnavailableMessage = "一時的に " + provider + " が利用できません。もしかしたらすぐに利用できるようになるかもです。";
                 showMessage(temporarilyUnavailableMessage);
                 break;
             case LocationProvider.AVAILABLE:
                 // if the provider is currently available.
                 if (provider.equals(LocationManager.NETWORK_PROVIDER)) {
-                    String availableMessage = provider + "が利用可能になりました。";
+                    String availableMessage = provider + " が利用可能になりました。";
                     showMessage(availableMessage);
                     requestLocationUpdates();
                 }
+                break;
+            default:
                 break;
         }
     }
@@ -76,7 +85,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     @Override
     public void onProviderEnabled(String provider) {
         Log.e(TAG, "onProviderEnabled.");
-        String message = provider + "が有効になりました。";
+        String message = provider + " が有効になりました。";
         showMessage(message);
         showProvider(provider);
         if (provider.equals(LocationManager.NETWORK_PROVIDER)) {
@@ -90,7 +99,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         Log.e(TAG, "onProviderDisabled.");
         showProvider(provider);
         if (provider.equals(LocationManager.NETWORK_PROVIDER)) {
-            String message = provider + "が無効になってしまいました。";
+            String message = provider + " が無効になってしまいました。";
             showMessage(message);
         }
     }
@@ -105,13 +114,9 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                     != PackageManager.PERMISSION_GRANTED &&
                     ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
                             != PackageManager.PERMISSION_GRANTED) {
-                // TODO: Consider calling
-                //    ActivityCompat#requestPermissions
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for ActivityCompat#requestPermissions for more details.
+                ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION
+                        , Manifest.permission.ACCESS_COARSE_LOCATION},1010);
+
                 return;
             }
             mLocationManager.requestLocationUpdates(
@@ -134,15 +139,14 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         double latitude = location.getLatitude();
         long time = location.getTime();
         Date date = new Date(time);
-        DateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss:SSS");
+        DateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss:SSS", Locale.JAPAN);
         String dateFormatted = formatter.format(date);
 
-        Log.i("System.out",String.format("%s緯度：%s、経度：%s",dateFormatted,latitude,longitude));
+        Log.i("System.out",String.format("%s緯度：%f、経度：%f",dateFormatted,latitude,longitude));
     }
 
     private void showMessage(String message) {
-        TextView textView = (TextView)findViewById(R.id.message);
-        textView.setText(message);
+        Log.i("System.out",message);
     }
 
     private void showProvider(String provider) {
