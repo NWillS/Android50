@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">Task44</string>
+    <string name="downloadimage">downloadImage</string>
+    <string name="image1">画像1</string>
+    <string name="image2">画像2</string>
+</resources>

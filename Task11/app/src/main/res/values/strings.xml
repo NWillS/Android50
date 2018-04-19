@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Task11</string>
+    <string name="hint">文字列を入力してください。</string>
+</resources>

@@ -2,6 +2,7 @@ package com.example.will.task25;
 
 import android.provider.BaseColumns;
 
+
 class FeedReaderContract {
 
     public static class FeedEntry {
