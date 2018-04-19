@@ -1,90 +1,155 @@
 package com.example.will.task45;
 
 import android.Manifest;
-import android.content.Intent;
+import android.app.Service;
 import android.content.pm.PackageManager;
-import android.os.Build;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.location.LocationProvider;
 import android.os.Bundle;
-import android.widget.Toast;
+import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity {
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
-    private final int REQUEST_PERMISSION = 1000;
+
+public class MainActivity extends AppCompatActivity implements LocationListener {
+
+    private static final String TAG = MainActivity.class.getSimpleName();
+    // 更新時間(目安)
+    private static final int LOCATION_UPDATE_MIN_TIME = 0;
+    // 更新距離(目安)
+    private static final int LOCATION_UPDATE_MIN_DISTANCE = 0;
+
+    private LocationManager mLocationManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.e(TAG, "onCreate");
         setContentView(R.layout.activity_main);
 
-        if(Build.VERSION.SDK_INT >= 23){
-            checkPermission();
-        }
-        else{
-            startLocationActivity();
-        }
+        mLocationManager = (LocationManager) this.getSystemService(Service.LOCATION_SERVICE);
+        requestLocationUpdates();
     }
 
-    // 位置情報許可の確認
-    public void checkPermission() {
-        // 既に許可している
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED){
-
-            startLocationActivity();
-        }
-        // 拒否していた場合
-        else{
-            requestLocationPermission();
-        }
-    }
-
-    // 許可を求める
-    private void requestLocationPermission() {
-        if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                Manifest.permission.ACCESS_FINE_LOCATION)) {
-            ActivityCompat.requestPermissions(MainActivity.this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                    REQUEST_PERMISSION);
-
-        } else {
-            Toast toast = Toast.makeText(this,
-                    "許可されないとアプリが実行できません", Toast.LENGTH_SHORT);
-            toast.show();
-
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION,},
-                    REQUEST_PERMISSION);
-
-        }
-    }
-
-    // 結果の受け取り
+    // Called when the location has changed.
     @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-        if (requestCode == REQUEST_PERMISSION) {
-            // 使用が許可された
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                startLocationActivity();
+    public void onLocationChanged(Location location) {
+        Log.e(TAG, "onLocationChanged.");
+        showLocation(location);
+    }
 
-            } else {
-                // それでも拒否された時の対応
-                Toast toast = Toast.makeText(this,
-                        "これ以上なにもできません", Toast.LENGTH_SHORT);
-                toast.show();
-            }
+    // Called when the provider status changed.
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+        Log.e(TAG, "onStatusChanged.");
+        showProvider(provider);
+        switch (status) {
+            case LocationProvider.OUT_OF_SERVICE:
+                // if the provider is out of service, and this is not expected to change in the near future.
+                String outOfServiceMessage = provider + "が圏外になっていて取得できません。";
+                showMessage(outOfServiceMessage);
+                break;
+            case LocationProvider.TEMPORARILY_UNAVAILABLE:
+                // if the provider is temporarily unavailable but is expected to be available shortly.
+                String temporarilyUnavailableMessage = "一時的に" + provider + "が利用できません。もしかしたらすぐに利用できるようになるかもです。";
+                showMessage(temporarilyUnavailableMessage);
+                break;
+            case LocationProvider.AVAILABLE:
+                // if the provider is currently available.
+                if (provider.equals(LocationManager.NETWORK_PROVIDER)) {
+                    String availableMessage = provider + "が利用可能になりました。";
+                    showMessage(availableMessage);
+                    requestLocationUpdates();
+                }
+                break;
         }
     }
 
-    // Intent でLocation
-    private void startLocationActivity() {
-        Intent intent = new Intent(getApplication(), LocationActivity.class);
-        startActivity(intent);
+    // Called when the provider is enabled by the user.
+    @Override
+    public void onProviderEnabled(String provider) {
+        Log.e(TAG, "onProviderEnabled.");
+        String message = provider + "が有効になりました。";
+        showMessage(message);
+        showProvider(provider);
+        if (provider.equals(LocationManager.NETWORK_PROVIDER)) {
+            requestLocationUpdates();
+        }
+    }
+
+    // Called when the provider is disabled by the user.
+    @Override
+    public void onProviderDisabled(String provider) {
+        Log.e(TAG, "onProviderDisabled.");
+        showProvider(provider);
+        if (provider.equals(LocationManager.NETWORK_PROVIDER)) {
+            String message = provider + "が無効になってしまいました。";
+            showMessage(message);
+        }
+    }
+
+    private void requestLocationUpdates() {
+        Log.e(TAG, "requestLocationUpdates()");
+        showProvider(LocationManager.NETWORK_PROVIDER);
+        boolean isNetworkEnabled = mLocationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+        showNetworkEnabled(isNetworkEnabled);
+        if (isNetworkEnabled) {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                    != PackageManager.PERMISSION_GRANTED &&
+                    ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                            != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                return;
+            }
+            mLocationManager.requestLocationUpdates(
+                    LocationManager.NETWORK_PROVIDER,
+                    LOCATION_UPDATE_MIN_TIME,
+                    LOCATION_UPDATE_MIN_DISTANCE,
+                    this);
+            Location location = mLocationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+            if (location != null) {
+                showLocation(location);
+            }
+        } else {
+            String message = "Networkが無効になっています。";
+            showMessage(message);
+        }
+    }
+
+    private void showLocation(Location location) {
+        double longitude = location.getLongitude();
+        double latitude = location.getLatitude();
+        long time = location.getTime();
+        Date date = new Date(time);
+        DateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss:SSS");
+        String dateFormatted = formatter.format(date);
+
+        Log.i("System.out",String.format("%s緯度：%s、経度：%s",dateFormatted,latitude,longitude));
+    }
+
+    private void showMessage(String message) {
+        TextView textView = (TextView)findViewById(R.id.message);
+        textView.setText(message);
+    }
+
+    private void showProvider(String provider) {
+        Log.i("System.out","Provider : " + provider);
+    }
+
+    private void showNetworkEnabled(boolean isNetworkEnabled) {
+        Log.i("System.out","NetworkEnabled : " + String.valueOf(isNetworkEnabled));
     }
 }
