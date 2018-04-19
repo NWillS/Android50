@@ -8,7 +8,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 
-@SuppressWarnings({"UnqualifiedFieldAccess", "UnnecessarilyQualifiedInnerClassAccess", "BooleanVariableAlwaysNegated"})
 public class MainActivity extends AppCompatActivity implements View.OnClickListener,DownloadFileFromURL.DownloadFileListener{
     private ImageView imageView;
     private Button image1Button;

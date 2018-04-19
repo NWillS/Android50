@@ -10,12 +10,11 @@ import android.util.Log;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 
-@SuppressWarnings({"UnqualifiedFieldAccess", "UnnecessarilyQualifiedInnerClassAccess", "NestedTryStatement", "DuplicateStringLiteralInspection", "OverlyLongMethod", "ImplicitCallToSuper", "OverlyBroadCatchBlock"})
 class DownloadFileFromURL extends AsyncTask<String, Integer, Bitmap> {
 
-    @SuppressWarnings("InterfaceWithOnlyOneDirectInheritor")
     interface DownloadFileListener{
         void succesfully(Bitmap bitmap);
     }
@@ -79,8 +78,8 @@ class DownloadFileFromURL extends AsyncTask<String, Integer, Bitmap> {
                     break;
             }
         } catch (Exception e) {
-            Log.d("debug", "downloadImage error");
-            Log.d("debug",e.getMessage());
+            Log.d("System.err", "downloadImage error");
+            Log.d("System.err",e.getMessage());
         } finally {
             if (urlConnection != null) {
                 urlConnection.disconnect();
