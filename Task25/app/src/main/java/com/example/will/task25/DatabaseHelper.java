@@ -6,7 +6,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import com.example.will.task25.FeedReaderContract.FeedEntry;
 
-@SuppressWarnings("UnqualifiedInnerClassAccess")
 class DatabaseHelper extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION           = 1;
     private static final String DATABASE_NAME           = "test_database";

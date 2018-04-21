@@ -3,6 +3,8 @@ package com.example.will.task25;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -16,8 +18,6 @@ import com.example.will.task25.TodoRecyclerViewAdapter.TodoAdapterListener;
 import java.util.ArrayList;
 import java.util.List;
 
-
-@SuppressWarnings({"UnqualifiedFieldAccess", "UnnecessarilyQualifiedInnerClassAccess", "UnqualifiedInnerClassAccess", "TryFinallyCanBeTryWithResources", "DuplicateStringLiteralInspection"})
 public class MainActivity extends AppCompatActivity implements TodoAdapterListener{
     private TodoRecyclerViewAdapter adapter;
 
@@ -50,17 +50,17 @@ public class MainActivity extends AppCompatActivity implements TodoAdapterListen
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     protected void onResume() {
         super.onResume();
         List<RowData> todoList = new ArrayList<>();
         //rawQueryメソッドでデータを取得
         DatabaseHelper dbHelper = new DatabaseHelper(this);
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
-        try {
+        try (SQLiteDatabase db = dbHelper.getReadableDatabase()) {
             String sql = "select * from " + FeedEntry.TABLE_TODO +
                     " where " + FeedEntry.COLUMN_DELETE_FLG + " = 0" +
-                    " order by " + FeedEntry.COLUMN_LIMIT_DATE + " asc ";
+                    " order by " + FeedEntry.COLUMN_LIMIT_DATE + " desc ";
             Cursor cursor = db.rawQuery(sql, null);
             //TextViewに表示
             while (cursor.moveToNext()) {
@@ -69,13 +69,10 @@ public class MainActivity extends AppCompatActivity implements TodoAdapterListen
                 String content = cursor.getString(2);
                 String limit = cursor.getString(5);
 
-                RowData todo = new RowData(todoID,title,content,limit);
+                RowData todo = new RowData(todoID, title, content, limit);
                 todoList.add(todo);
             }
             cursor.close();
-        } finally {
-
-            db.close();
         }
         adapter.setTodoList(todoList);
         adapter.notifyDataSetChanged();
