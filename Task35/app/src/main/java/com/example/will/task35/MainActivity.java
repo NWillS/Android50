@@ -23,7 +23,6 @@ import java.util.Collections;
 
 import static android.widget.Toast.LENGTH_SHORT;
 
-@SuppressWarnings({"UnqualifiedFieldAccess", "UnnecessarilyQualifiedInnerClassAccess", "DuplicateStringLiteralInspection"})
 public class MainActivity extends AppCompatActivity {
     private CallbackManager callbackManager;
 
