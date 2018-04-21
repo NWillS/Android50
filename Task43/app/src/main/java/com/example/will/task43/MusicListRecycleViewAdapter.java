@@ -1,6 +1,5 @@
 package com.example.will.task43;
 
-import android.annotation.SuppressLint;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -9,11 +8,10 @@ import android.view.ViewGroup;
 
 import java.util.List;
 
-@SuppressWarnings({"UnqualifiedFieldAccess", "UnnecessarilyQualifiedInnerClassAccess", "AssignmentOrReturnOfFieldWithMutableType"})
 class MusicListRecycleViewAdapter extends RecyclerView.Adapter<MusicListViewHolder> {
     private List<RowData> musicList;
+    private int playing = -1;
 
-    @SuppressWarnings("InterfaceWithOnlyOneDirectInheritor")
     interface MusicListListener{
         void play(int filePath);
         void stop();
@@ -32,25 +30,29 @@ class MusicListRecycleViewAdapter extends RecyclerView.Adapter<MusicListViewHold
         return new MusicListViewHolder(inflate);
     }
 
-    @SuppressLint("RecyclerView")
     @Override
-    public void onBindViewHolder(@NonNull MusicListViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull final MusicListViewHolder holder, final int position) {
         holder.getMusicNameTextView().setText(musicList.get(position).getMusicName());
-
+        if (position == playing){
+            holder.play();
+            holder.setPlaying(true);
+        }else{
+            holder.stop();
+            holder.setPlaying(false);
+        }
         holder.getPlayImageView().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                listener.play(musicList.get(position).getId());
-
+                if(holder.isPlaying()) {
+                    listener.stop();
+                    playing = -1;
+                } else {
+                    listener.play(musicList.get(position).getId());
+                    playing = position;
+                }
             }
         });
-        holder.getStopImageView().setOnClickListener(new View.OnClickListener(){
 
-            @Override
-            public void onClick(View view) {
-                listener.stop();
-            }
-        });
     }
 
     @Override
@@ -60,4 +62,5 @@ class MusicListRecycleViewAdapter extends RecyclerView.Adapter<MusicListViewHold
     public void setMusicList(List<RowData> musicList) {
         this.musicList = musicList;
     }
+
 }

@@ -11,9 +11,10 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
-@SuppressWarnings({"UnqualifiedFieldAccess", "UnnecessarilyQualifiedInnerClassAccess"})
 public class MainActivity extends AppCompatActivity implements MusicListRecycleViewAdapter.MusicListListener {
     private MediaPlayer mediaPlayer;
+    private MusicListRecycleViewAdapter adapter;
+    private List<RowData> musicList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,7 +22,7 @@ public class MainActivity extends AppCompatActivity implements MusicListRecycleV
         setContentView(R.layout.activity_main);
 
         RecyclerView rv = (RecyclerView) findViewById(R.id.recyclerView);
-        MusicListRecycleViewAdapter adapter = new MusicListRecycleViewAdapter();
+        adapter = new MusicListRecycleViewAdapter();
         adapter.setListener(this);
 
         LinearLayoutManager llm = new LinearLayoutManager(this);
@@ -29,7 +30,7 @@ public class MainActivity extends AppCompatActivity implements MusicListRecycleV
         rv.setLayoutManager(llm);
         rv.setAdapter(adapter);
 
-        List<RowData> musicList = new ArrayList<>();
+        musicList = new ArrayList<>();
         musicList.add(new RowData("first",R.raw.first));
         musicList.add(new RowData("second",R.raw.second));
         musicList.add(new RowData("third",R.raw.third));
@@ -47,14 +48,22 @@ public class MainActivity extends AppCompatActivity implements MusicListRecycleV
         Log.i("System.out", String.valueOf(filePath));
         mediaPlayer.stop();
         mediaPlayer.reset();
-        mediaPlayer = MediaPlayer.create(this,filePath);
+        mediaPlayer = MediaPlayer.create(this, filePath);
         mediaPlayer.start();
+
+        reload();
     }
 
     @Override
     public void stop() {
         mediaPlayer.stop();
         mediaPlayer.reset();
+
+        reload();
+    }
+
+    private void reload(){
+        adapter.notifyItemRangeChanged(0, musicList.size());
     }
 
 }

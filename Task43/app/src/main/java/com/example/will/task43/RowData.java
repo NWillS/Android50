@@ -1,6 +1,5 @@
 package com.example.will.task43;
 
-@SuppressWarnings("UnnecessaryThis")
 class RowData {
     private final String musicName;
     private final int id;
@@ -17,4 +16,5 @@ class RowData {
     public int getId() {
         return this.id;
     }
+
 }

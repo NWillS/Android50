@@ -23,27 +23,17 @@
 
             <ImageView
                 android:id="@+id/playImageView"
-                android:layout_width="10dp"
+                android:layout_width="5dp"
                 android:layout_height="50dp"
                 android:layout_weight="1"
                 android:clickable="true"
-                app:srcCompat="@drawable/play"
                 android:contentDescription="@string/play"
-                android:focusable="true" />
-
-            <ImageView
-                android:id="@+id/stopImageView"
-                android:layout_width="10dp"
-                android:layout_height="50dp"
-                android:layout_weight="1"
-                android:clickable="true"
-                app:srcCompat="@drawable/stop"
-                android:contentDescription="@string/stop"
-                android:focusable="true" />
+                android:focusable="true"
+                app:srcCompat="@drawable/play" />
 
             <TextView
                 android:id="@+id/musicNameTextView"
-                android:layout_width="200dp"
+                android:layout_width="250dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:textSize="24sp" />
