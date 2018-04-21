@@ -8,7 +8,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-@SuppressWarnings({"UnqualifiedFieldAccess", "UnnecessarilyQualifiedInnerClassAccess"})
 public class MainActivity extends AppCompatActivity {
     private EditText titleEditText;
     private EditText contentEditText;
@@ -24,6 +23,19 @@ public class MainActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String title = titleEditText.getText().toString();
+                if(title.isEmpty()){
+                    titleEditText.setError("Please enter title");
+                    return;
+                }
+
+                String content = contentEditText.getText().toString();
+
+                if(content.isEmpty()){
+                    contentEditText.setError("Please enter content");
+                    return;
+                }
+
                 callMailer();
             }
         });
