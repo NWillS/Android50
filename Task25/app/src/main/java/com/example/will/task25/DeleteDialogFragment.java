@@ -7,9 +7,9 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
 
-@SuppressWarnings({"UnqualifiedFieldAccess", "UnqualifiedInnerClassAccess"})
+
 public class DeleteDialogFragment extends DialogFragment {
-    @SuppressWarnings("InterfaceWithOnlyOneDirectInheritor")
+
     interface DeleteDialogListener{
         void onClickOk();
     }

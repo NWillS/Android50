@@ -19,8 +19,6 @@ import com.example.will.task25.TodoRecyclerViewAdapter.TodoAdapterListener;
 import java.util.ArrayList;
 import java.util.List;
 
-
-@SuppressWarnings({"UnqualifiedFieldAccess", "UnnecessarilyQualifiedInnerClassAccess", "UnqualifiedInnerClassAccess", "TryFinallyCanBeTryWithResources", "DuplicateStringLiteralInspection"})
 public class MainActivity extends AppCompatActivity implements TodoAdapterListener,DeleteDialogFragment.DeleteDialogListener{
     private TodoRecyclerViewAdapter adapter;
     private int position;

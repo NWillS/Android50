@@ -19,9 +19,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-
-
-@SuppressWarnings({"UnqualifiedFieldAccess", "UnnecessarilyQualifiedInnerClassAccess", "UnqualifiedInnerClassAccess", "DuplicateStringLiteralInspection", "SimpleDateFormatWithoutLocale"})
 public class InputActivity extends AppCompatActivity {
     private RowData todo;
     private String status;

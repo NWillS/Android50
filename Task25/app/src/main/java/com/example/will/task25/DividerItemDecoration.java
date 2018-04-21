@@ -11,7 +11,6 @@ import android.support.v7.widget.RecyclerView.LayoutParams;
 import android.support.v7.widget.RecyclerView.State;
 import android.view.View;
 
-@SuppressWarnings({"FieldMayBeFinal", "ImplicitCallToSuper", "UnqualifiedFieldAccess", "UnnecessarilyQualifiedInnerClassAccess", "CanBeFinal", "UnqualifiedInnerClassAccess"})
 class DividerItemDecoration extends ItemDecoration {
     private static final int[] ATTRS = {
             android.R.attr.listDivider

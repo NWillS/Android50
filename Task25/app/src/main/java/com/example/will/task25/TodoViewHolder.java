@@ -5,7 +5,6 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-@SuppressWarnings({"FieldMayBeFinal", "UnqualifiedFieldAccess", "UnnecessarilyQualifiedInnerClassAccess", "CanBeFinal", "UnqualifiedInnerClassAccess"})
 public class TodoViewHolder extends ViewHolder {
     private TextView title;
     private TextView limit;

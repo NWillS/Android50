@@ -7,11 +7,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import java.util.List;
 
-@SuppressWarnings({"UnqualifiedFieldAccess", "UnnecessarilyQualifiedInnerClassAccess", "AssignmentOrReturnOfFieldWithMutableType", "UnqualifiedInnerClassAccess", "AnonymousClassVariableHidesContainingMethodVariable"})
 class TodoRecyclerViewAdapter extends Adapter<TodoViewHolder> {
     private List<RowData> todoList;
 
-    @SuppressWarnings("InterfaceWithOnlyOneDirectInheritor")
+
     interface TodoAdapterListener{
         void selectedTodo(RowData todo);
         void onLongClicked(int position);

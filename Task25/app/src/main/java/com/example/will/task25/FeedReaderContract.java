@@ -2,7 +2,6 @@ package com.example.will.task25;
 
 class FeedReaderContract {
 
-    @SuppressWarnings("PublicInnerClass")
     public static class FeedEntry {
 
         public static final String TABLE_TODO             = "tr_todo";
