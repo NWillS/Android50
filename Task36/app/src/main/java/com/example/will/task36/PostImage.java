@@ -1,8 +1,11 @@
 package com.example.will.task36;
 
 import android.Manifest;
+import android.content.BroadcastReceiver;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
@@ -12,17 +15,49 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.twitter.sdk.android.core.TwitterCore;
 import com.twitter.sdk.android.core.TwitterSession;
 import com.twitter.sdk.android.tweetcomposer.ComposerActivity;
+import com.twitter.sdk.android.tweetcomposer.TweetUploadService;
 
 public class PostImage extends AppCompatActivity {
     private Uri myImageUri;
     private Uri m_uri;
     private static final int REQUEST_CHOOSER = 1000;
+    private ProgressBar progressBar;
+
+    private BroadcastReceiver myResultReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            switch (intent.getAction()) {
+                case TweetUploadService.UPLOAD_SUCCESS:
+                    // success
+                    Log.i("share", "share success" + context);
+                    Toast.makeText(context, "投稿完了", Toast.LENGTH_SHORT).show();
+                    stopProgressBar();
+                    break;
+                case TweetUploadService.UPLOAD_FAILURE:
+                    // failure
+                    Log.i("share", "share fail");
+                    Toast.makeText(context, "投稿失敗", Toast.LENGTH_SHORT).show();
+                    stopProgressBar();
+                    break;
+                case TweetUploadService.TWEET_COMPOSE_CANCEL:
+                    // cancel
+                    stopProgressBar();
+                    break;
+
+                default:
+                    break;
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +65,11 @@ public class PostImage extends AppCompatActivity {
         setContentView(R.layout.activity_post_image);
         permission();
 
+        registerReceiver(myResultReceiver,new IntentFilter("com.twitter.sdk.android.tweetcomposer.UPLOAD_SUCCESS"));
+        registerReceiver(myResultReceiver,new IntentFilter("com.twitter.sdk.android.tweetcomposer.UPLOAD_FAILURE"));
+        registerReceiver(myResultReceiver,new IntentFilter("com.twitter.sdk.android.tweetcomposer.TWEET_COMPOSE_CANCEL"));
 
+        progressBar = (ProgressBar) findViewById(R.id.progressBar);
         Button postButton = findViewById(R.id.postButton);
         postButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,6 +155,11 @@ public class PostImage extends AppCompatActivity {
                     .hashtags("#Android")
                     .createIntent();
             startActivity(intent);
+            progressBar.setVisibility(View.VISIBLE);
         }
+    }
+
+    private void stopProgressBar(){
+        progressBar.setVisibility(View.GONE);
     }
 }
