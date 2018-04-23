@@ -29,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageView imageView;
 
     private Uri cameraUri;
+    private boolean permission;
 
 
 
@@ -36,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        permission = !checkPermissionREAD_EXTERNAL_STORAGE(this);
 
 
         imageView = (ImageView) findViewById(R.id.imageView);
@@ -44,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(checkPermissionREAD_EXTERNAL_STORAGE(getApplication())) {
+                if(permission) {
                     String filename = System.currentTimeMillis() + ".jpg";
                     ContentValues values = new ContentValues();
                     values.put(MediaStore.Images.Media.TITLE, filename);
