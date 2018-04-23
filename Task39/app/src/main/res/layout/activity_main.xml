@@ -12,7 +12,14 @@
         android:id="@+id/imageView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:contentDescription="@string/cameraimage" />
+        android:contentDescription="@string/cameraimage"
+        android:scaleType="fitXY" />
+
+    <SurfaceView
+        android:id="@+id/surfaceView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="invisible" />
 
     <Button
         android:id="@+id/button"
