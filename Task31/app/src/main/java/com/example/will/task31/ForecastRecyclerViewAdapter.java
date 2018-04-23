@@ -12,7 +12,7 @@ import com.bumptech.glide.Glide;
 import java.util.ArrayList;
 import java.util.List;
 
-@SuppressWarnings({"UnqualifiedFieldAccess", "UnnecessarilyQualifiedInnerClassAccess", "UnnecessaryThis", "AssignmentOrReturnOfFieldWithMutableType"})
+
 class ForecastRecyclerViewAdapter extends RecyclerView.Adapter<ForecastViewHolder> {
     private Context context;
     private List<ForecastData> forecasts = new ArrayList<>();

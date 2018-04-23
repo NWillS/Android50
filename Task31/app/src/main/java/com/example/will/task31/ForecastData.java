@@ -1,6 +1,6 @@
 package com.example.will.task31;
 
-@SuppressWarnings({"FieldMayBeFinal", "UnnecessaryThis", "CanBeFinal"})
+
 class ForecastData {
 
     private String date;

@@ -6,28 +6,25 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
-import com.example.will.task31.api.LivedoorWeatherWebService;
+
+import com.example.will.task31.api.WeatherApi;
 import com.example.will.task31.api.model.Forecast;
 import com.example.will.task31.api.model.Weather;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import retrofit2.Call;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
-@SuppressWarnings({"UnqualifiedFieldAccess", "UnnecessarilyQualifiedInnerClassAccess", "VariableNotUsedInsideIf"})
-public class MainActivity extends AppCompatActivity {
-    private static final String TAG = "MainActivity";
-    private static final String API_URL = "http://weather.livedoor.com/forecast/webservice/json/";
-    private final Handler handler = new Handler();
+public class MainActivity extends AppCompatActivity implements WeatherApi.WeatherApiCallback{
+
+    private WeatherApi weatherApi;
+    private int position;
     private ForecastRecyclerViewAdapter adapter;
     private TextView description;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,69 +40,33 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(llm);
         recyclerView.setAdapter(adapter);
 
+        weatherApi = new WeatherApi(this);
         getForecast();
-
     }
 
-    private void getForecast(){
-        try {
-            Thread thread = new Thread(new Runnable() {
 
-                @Override
-                public void run() {
+    void getForecast(){
+        weatherApi.getWeather();
+    }
 
-                    Retrofit retrofit = new Retrofit.Builder()
-                            .baseUrl(API_URL)
-                            .addConverterFactory(GsonConverterFactory.create())
-                            .build();
 
-                    LivedoorWeatherWebService service = retrofit.create(LivedoorWeatherWebService.class);
-                    Call<Weather> call = service.webservice("130010");
-
-                    Weather weather = null;
-                    try {
-                        weather = call.execute().body();
-                        if (weather != null) {
-                            Log.d(TAG, "weather is not null");
-                        } else {
-                            Log.d(TAG, "weather is null");
-                        }
-                    } catch (IOException e) {
-                        Log.d(TAG, "weather :" + e.getMessage());
-                    }
-
-                    final Weather temp_weather = weather;
-                    handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (temp_weather != null) {
-                                description.setText(temp_weather.description.text);
-                                List<ForecastData> forecasts = new ArrayList<>();
-                                for(int position = 0; position < temp_weather.forecasts.size();position++){
-                                    Forecast forecast = temp_weather.forecasts.get(position);
-                                    String date = forecast.dateLabel;
-                                    String telop = forecast.telop;
-                                    String iconUrl = forecast.image.url;
-
-                                    ForecastData forecastData = new ForecastData(date,telop,iconUrl);
-                                    forecasts.add(forecastData);
-                                }
-
-                                adapter.setForecasts(forecasts);
-                                adapter.notifyDataSetChanged();
-
-                            }
-                        }
-                    });
-                }
-            });
-
-            thread.start();
-
-        } catch (RuntimeException e) {
-            Log.e("System.err",e.getMessage());
+    @Override
+    public void success(Weather weather) {
+        if (weather != null) {
+            description.setText(weather.getDescription().getText());
+            List<Forecast> forecasts = weather.getForecasts();
+            List<ForecastData> forecastDataList = new ArrayList<>();
+            for (Forecast forecast : forecasts){
+                ForecastData data = new ForecastData(forecast.getDateLabel(),forecast.getTelop(),forecast.getImage().getUrl());
+                forecastDataList.add(data);
+            }
+            adapter.setForecasts(forecastDataList);
+            adapter.notifyDataSetChanged();
         }
     }
 
+    @Override
+    public void failed() {
 
+    }
 }
