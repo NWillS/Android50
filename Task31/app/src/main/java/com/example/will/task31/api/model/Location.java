@@ -1,6 +1,13 @@
 package com.example.will.task31.api.model;
 
-@SuppressWarnings("PublicField")
 public class Location {
-    public String city;
+    private String city;
+
+    public String getCity() {
+        return this.city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
 }

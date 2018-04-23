@@ -5,7 +5,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-@SuppressWarnings({"UnqualifiedFieldAccess", "UnnecessarilyQualifiedInnerClassAccess", "UnnecessaryThis"})
+
 public class ForecastViewHolder extends RecyclerView.ViewHolder {
     private ImageView iconImageView;
     private TextView dateTextView;

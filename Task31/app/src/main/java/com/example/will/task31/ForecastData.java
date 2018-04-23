@@ -1,13 +1,13 @@
 package com.example.will.task31;
 
-@SuppressWarnings({"FieldMayBeFinal", "UnnecessaryThis", "CanBeFinal"})
-class ForecastData {
+
+public class ForecastData {
 
     private String date;
     private String forecast;
     private String iconURl;
 
-    ForecastData(String date, String forecast, String iconURl) {
+    public ForecastData(String date, String forecast, String iconURl) {
         this.date = date;
         this.forecast = forecast;
         this.iconURl = iconURl;
