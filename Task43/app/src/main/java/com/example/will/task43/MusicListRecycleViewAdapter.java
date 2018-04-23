@@ -63,4 +63,8 @@ class MusicListRecycleViewAdapter extends RecyclerView.Adapter<MusicListViewHold
         this.musicList = musicList;
     }
 
+    public void complete(){
+        playing = -1;
+        listener.stop();
+    }
 }

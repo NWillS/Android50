@@ -11,7 +11,7 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements MusicListRecycleViewAdapter.MusicListListener {
+public class MainActivity extends AppCompatActivity implements MusicListRecycleViewAdapter.MusicListListener,MediaPlayer.OnCompletionListener {
     private MediaPlayer mediaPlayer;
     private MusicListRecycleViewAdapter adapter;
     private List<RowData> musicList;
@@ -40,15 +40,19 @@ public class MainActivity extends AppCompatActivity implements MusicListRecycleV
         adapter.notifyDataSetChanged();
 
         mediaPlayer = new MediaPlayer();
+
+
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
     }
 
     @Override
     public void play(int filePath) {
         Log.i("System.out", String.valueOf(filePath));
+
         mediaPlayer.stop();
         mediaPlayer.reset();
         mediaPlayer = MediaPlayer.create(this, filePath);
+        mediaPlayer.setOnCompletionListener(this);
         mediaPlayer.start();
 
         reload();
@@ -62,8 +66,14 @@ public class MainActivity extends AppCompatActivity implements MusicListRecycleV
         reload();
     }
 
+
     private void reload(){
         adapter.notifyItemRangeChanged(0, musicList.size());
     }
 
+    @Override
+    public void onCompletion(MediaPlayer mp) {
+        Log.i("System.out","finished");
+        adapter.complete();
+    }
 }
