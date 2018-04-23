@@ -82,9 +82,12 @@ public class RecordActivity extends Activity {
                     // 画像データを保存する
                     Bitmap temp_bitmap = Bitmap.createBitmap(tmp_bitmap, 0, 0, width, height, matrix, true);
 
-                    int temp_width = (height * svWidth) / cWidth ;
+                    int temp_width = (width * svWidth) / cWidth ;
                     Log.i("Cam", temp_width + " : " + width );
                     Bitmap bitmap = Bitmap.createBitmap(temp_bitmap, 0, 0, temp_width, width, null, true);
+
+                    Log.i("Cam", String.valueOf(cWidth));
+                    Log.i("Cam", String.valueOf(svWidth));
 
                     MyApplication app = (MyApplication) getApplication();
                     app.setObj(bitmap);
@@ -157,10 +160,10 @@ public class RecordActivity extends Activity {
                     parameters.setPictureSize(pictureSize.width, pictureSize.height);
 
                     // カメラプレビューレイアウトの設定
-                    int previewWidth = previewSize.width;
-//                    int previewWidth = getWindowManager().getDefaultDisplay().getWidth();
-                    int previewHeight = previewSize.height;
-//                    int previewHeight = getWindowManager().getDefaultDisplay().getHeight();
+//                    int previewWidth = previewSize.width;
+                    int previewWidth = getWindowManager().getDefaultDisplay().getHeight();
+//                    int previewHeight = previewSize.height;
+                    int previewHeight = getWindowManager().getDefaultDisplay().getWidth();
                     android.view.ViewGroup.LayoutParams layoutParams = mySurfaceView.getLayoutParams();
                     if (portrait) {
                         layoutParams.width = previewHeight;
