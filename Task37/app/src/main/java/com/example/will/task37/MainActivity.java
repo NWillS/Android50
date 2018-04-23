@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 public class MainActivity extends AppCompatActivity {
+    private EditText toEditText;
     private EditText titleEditText;
     private EditText contentEditText;
 
@@ -17,12 +18,19 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        toEditText = (EditText) findViewById(R.id.toEditText);
         titleEditText = (EditText) findViewById(R.id.titleEditText);
         contentEditText = (EditText) findViewById(R.id.contentEditText);
         Button button = (Button)findViewById(R.id.button);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String to = toEditText.getText().toString();
+                if(to.isEmpty()){
+                    toEditText.setError("Please enter destination");
+                    return;
+                }
+
                 String title = titleEditText.getText().toString();
                 if(title.isEmpty()){
                     titleEditText.setError("Please enter title");
@@ -45,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
         intent.setAction(Intent.ACTION_SENDTO);
 
         intent.setType("text/plain");
-        intent.setData(Uri.parse("mailto:"));
+        intent.setData(Uri.parse("mailto:" + toEditText.getText()));
         intent.putExtra(Intent.EXTRA_SUBJECT, titleEditText.getText().toString());
         intent.putExtra(Intent.EXTRA_TEXT, contentEditText.getText().toString());
 
