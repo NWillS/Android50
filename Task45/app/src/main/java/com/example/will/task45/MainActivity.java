@@ -156,4 +156,10 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     private void showNetworkEnabled(boolean isNetworkEnabled) {
         Log.i("System.out","NetworkEnabled : " + String.valueOf(isNetworkEnabled));
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mLocationManager.removeUpdates(this);
+    }
 }
