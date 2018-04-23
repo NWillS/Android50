@@ -2,18 +2,18 @@ package com.example.will.task25;
 
 import android.content.ContentValues;
 import android.content.Intent;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.example.will.task25.FeedReaderContract.FeedEntry;
+import com.example.will.task25.Database.DatabaseHandler;
+import com.example.will.task25.Database.DatabaseHelper;
+import com.example.will.task25.Database.FeedReaderContract.FeedEntry;
 import com.example.will.task25.TodoRecyclerViewAdapter.TodoAdapterListener;
 
 import java.util.ArrayList;
@@ -64,26 +64,9 @@ public class MainActivity extends AppCompatActivity implements TodoAdapterListen
         //rawQueryメソッドでデータを取得
         DatabaseHelper dbHelper = new DatabaseHelper(this);
         SQLiteDatabase db = dbHelper.getReadableDatabase();
-        try {
-            String sql = "select * from " + FeedEntry.TABLE_TODO +
-                    " where " + FeedEntry.COLUMN_DELETE_FLG + " = 0" +
-                    " order by " + FeedEntry.COLUMN_LIMIT_DATE + " desc ";
-            Cursor cursor = db.rawQuery(sql, null);
-            //TextViewに表示
-            while (cursor.moveToNext()) {
-                int todoID = cursor.getInt(0);
-                String title = cursor.getString(1);
-                String content = cursor.getString(2);
-                String limit = cursor.getString(5);
+       todoList =  DatabaseHandler.select(db);
 
-                RowData todo = new RowData(todoID,title,content,limit);
-                todoList.add(todo);
-            }
-            cursor.close();
-        } finally {
 
-            db.close();
-        }
         adapter.setTodoList(todoList);
         adapter.notifyDataSetChanged();
     }
@@ -113,12 +96,7 @@ public class MainActivity extends AppCompatActivity implements TodoAdapterListen
         DatabaseHelper dbHelper = new DatabaseHelper(this);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         int ret;
-        try {
-            String whereClause = FeedEntry.COLUMN_TODO_ID + " = ?";
-            ret = db.update(FeedEntry.TABLE_TODO,contentValues, whereClause, whereArgs);
-        } finally {
-            db.close();
-        }
+        ret = DatabaseHandler.delete(db,todoList.get(position).getTodoID());
 
         reloadList();
 

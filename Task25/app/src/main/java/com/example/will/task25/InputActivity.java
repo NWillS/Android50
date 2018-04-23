@@ -12,7 +12,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.will.task25.FeedReaderContract.FeedEntry;
+import com.example.will.task25.Database.DatabaseHandler;
+import com.example.will.task25.Database.DatabaseHelper;
+import com.example.will.task25.Database.FeedReaderContract.FeedEntry;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -71,9 +73,25 @@ public class InputActivity extends AppCompatActivity {
                 String limited = getLimitDateFrom(nowDate);
 
                 if(status.equals("updateTodo")){
-                    update(db,nowDate,limited);
+                    int ret;
+                    ret = DatabaseHandler.update(db,todo.getTodoID(),titleEditText.getText().toString(),contentEditText.getText().toString());
+//                    update(db,nowDate,limited);
+
+                    if (ret == -1) {
+                        Toast.makeText(getApplication(), "Update失敗", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getApplication(), "Update成功", Toast.LENGTH_SHORT).show();
+                    }
                 } else {
-                    insert(db,nowDate,limited);
+                    long ret;
+                    ret = DatabaseHandler.insert(db,titleEditText.getText().toString(),contentEditText.getText().toString());
+                    if (ret == -1L) {
+                        Toast.makeText(getApplication(), "Insert失敗", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getApplication(), "Insert成功", Toast.LENGTH_SHORT).show();
+                    }
+
+//                    insert(db,nowDate,limited);
                 }
                 finish();
             }
@@ -119,11 +137,7 @@ public class InputActivity extends AppCompatActivity {
         } finally {
             db.close();
         }
-        if (ret == -1) {
-            Toast.makeText(getApplication(), "Update失敗", Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(getApplication(), "Update成功", Toast.LENGTH_SHORT).show();
-        }
+
     }
 
 

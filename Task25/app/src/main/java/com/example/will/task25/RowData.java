@@ -7,13 +7,13 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-class RowData implements Serializable{
+public class RowData implements Serializable{
     private int todoID;
     private String title;
     private String content;
     private String limit;
 
-    RowData(int todoID, String title, String content, String limit) {
+    public RowData(int todoID, String title, String content, String limit) {
         this.todoID = todoID;
         this.title = title;
         this.content = content;
@@ -55,7 +55,6 @@ class RowData implements Serializable{
     }
 
     private String dateFormat(String dateStr){
-        @SuppressLint("SimpleDateFormat")
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         Date date = new Date(dateStr);
         return df.format(date);

@@ -1,6 +1,6 @@
-package com.example.will.task25;
+package com.example.will.task25.Database;
 
-class FeedReaderContract {
+public class FeedReaderContract {
 
     public static class FeedEntry {
 
