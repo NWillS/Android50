@@ -7,7 +7,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class RowData implements Serializable{
+public class RowData implements Serializable {
     private int todoID;
     private String title;
     private String content;
@@ -18,8 +18,6 @@ public class RowData implements Serializable{
         this.title = title;
         this.content = content;
         this.limit = dateFormat(limit);
-
-
     }
 
     public int getTodoID() {
@@ -54,7 +52,7 @@ public class RowData implements Serializable{
         this.limit = dateFormat(limit);
     }
 
-    private String dateFormat(String dateStr){
+    private String dateFormat(String dateStr) {
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         Date date = new Date(dateStr);
         return df.format(date);

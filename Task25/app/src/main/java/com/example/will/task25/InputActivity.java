@@ -41,7 +41,7 @@ public class InputActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         Button registerButton = (Button) findViewById(R.id.registerButton);
 
-        if(status.equals("updateTodo")){
+        if (status.equals("updateTodo")) {
             todo = (RowData) intent.getSerializableExtra("todo");
             toolbar.setTitle(todo.getTitle());
             titleEditText.setText(todo.getTitle());
@@ -54,14 +54,14 @@ public class InputActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 String title = titleEditText.getText().toString();
-                if(title.isEmpty()){
+                if (title.isEmpty()) {
                     titleEditText.setError("Please enter title");
                     return;
                 }
 
                 String content = contentEditText.getText().toString();
 
-                if(content.isEmpty()){
+                if (content.isEmpty()) {
                     contentEditText.setError("Please enter content");
                     return;
                 }
@@ -72,11 +72,9 @@ public class InputActivity extends AppCompatActivity {
                 String nowDate = getNowDate();
                 String limited = getLimitDateFrom(nowDate);
 
-                if(status.equals("updateTodo")){
+                if (status.equals("updateTodo")) {
                     int ret;
-                    ret = DatabaseHandler.update(db,todo.getTodoID(),titleEditText.getText().toString(),contentEditText.getText().toString());
-//                    update(db,nowDate,limited);
-
+                    ret = DatabaseHandler.update(db, todo.getTodoID(), titleEditText.getText().toString(), contentEditText.getText().toString());
                     if (ret == -1) {
                         Toast.makeText(getApplication(), "Update失敗", Toast.LENGTH_SHORT).show();
                     } else {
@@ -84,21 +82,19 @@ public class InputActivity extends AppCompatActivity {
                     }
                 } else {
                     long ret;
-                    ret = DatabaseHandler.insert(db,titleEditText.getText().toString(),contentEditText.getText().toString());
+                    ret = DatabaseHandler.insert(db, titleEditText.getText().toString(), contentEditText.getText().toString());
                     if (ret == -1L) {
                         Toast.makeText(getApplication(), "Insert失敗", Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(getApplication(), "Insert成功", Toast.LENGTH_SHORT).show();
                     }
-
-//                    insert(db,nowDate,limited);
                 }
                 finish();
             }
         });
     }
 
-    private void insert(SQLiteDatabase db, String nowDate,String limited){
+    private void insert(SQLiteDatabase db, String nowDate, String limited) {
         ContentValues contentValues = new ContentValues();
         contentValues.put(FeedEntry.COLUMN_TODO_TITLE, titleEditText.getText().toString());
         contentValues.put(FeedEntry.COLUMN_TODO_CONTENTS, contentEditText.getText().toString());
@@ -120,7 +116,7 @@ public class InputActivity extends AppCompatActivity {
         }
     }
 
-    private void update(SQLiteDatabase db, String nowDate,String limited){
+    private void update(SQLiteDatabase db, String nowDate, String limited) {
         ContentValues contentValues = new ContentValues();
         contentValues.put(FeedEntry.COLUMN_TODO_TITLE, titleEditText.getText().toString());
         contentValues.put(FeedEntry.COLUMN_TODO_CONTENTS, contentEditText.getText().toString());
@@ -133,7 +129,7 @@ public class InputActivity extends AppCompatActivity {
             String whereClause = FeedEntry.COLUMN_TODO_ID + " = ?";
             String[] whereArgs = {String.valueOf(todo.getTodoID())};
 
-            ret = db.update(FeedEntry.TABLE_TODO,contentValues,whereClause,whereArgs);
+            ret = db.update(FeedEntry.TABLE_TODO, contentValues, whereClause, whereArgs);
         } finally {
             db.close();
         }
@@ -141,21 +137,21 @@ public class InputActivity extends AppCompatActivity {
     }
 
 
-    private String getNowDate(){
+    private String getNowDate() {
         @SuppressLint("SimpleDateFormat")
         DateFormat df = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
         Date date = new Date(System.currentTimeMillis());
         return df.format(date);
     }
 
-    private String getLimitDateFrom(String dateStr){
+    private String getLimitDateFrom(String dateStr) {
         Calendar calendar = Calendar.getInstance();
         @SuppressLint("SimpleDateFormat")
         DateFormat df = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 
         Date date = new Date(dateStr);
         calendar.setTime(date);
-        calendar.add(Calendar.DATE,7);
+        calendar.add(Calendar.DATE, 7);
         Date limitDate = new Date(calendar.getTimeInMillis());
         return df.format(limitDate);
     }

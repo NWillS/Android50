@@ -5,14 +5,16 @@ import android.support.v7.widget.RecyclerView.Adapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import java.util.List;
 
 class TodoRecyclerViewAdapter extends Adapter<TodoViewHolder> {
     private List<RowData> todoList;
 
 
-    interface TodoAdapterListener{
+    interface TodoAdapterListener {
         void selectedTodo(RowData todo);
+
         void onLongClicked(int position);
     }
 
@@ -21,7 +23,7 @@ class TodoRecyclerViewAdapter extends Adapter<TodoViewHolder> {
     @NonNull
     @Override
     public TodoViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View inflate = LayoutInflater.from(parent.getContext()).inflate(R.layout.row, parent,false);
+        View inflate = LayoutInflater.from(parent.getContext()).inflate(R.layout.row, parent, false);
         return new TodoViewHolder(inflate);
     }
 
@@ -39,7 +41,7 @@ class TodoRecyclerViewAdapter extends Adapter<TodoViewHolder> {
             public void onClick(View view) {
                 int position = holder.getAdapterPosition();
                 RowData todo = todoList.get(position);
-                if(listener != null){
+                if (listener != null) {
                     listener.selectedTodo(todo);
                 }
             }
@@ -48,7 +50,7 @@ class TodoRecyclerViewAdapter extends Adapter<TodoViewHolder> {
             @Override
             public boolean onLongClick(View view) {
                 int position = holder.getAdapterPosition();
-                if(listener != null){
+                if (listener != null) {
                     listener.onLongClicked(position);
                     return true;
                 }
@@ -57,7 +59,7 @@ class TodoRecyclerViewAdapter extends Adapter<TodoViewHolder> {
         });
     }
 
-    void setListener(TodoAdapterListener listener){
+    void setListener(TodoAdapterListener listener) {
         this.listener = listener;
     }
 

@@ -9,11 +9,12 @@ public class TodoViewHolder extends ViewHolder {
     private TextView title;
     private TextView limit;
     private LinearLayout linear;
+
     public TodoViewHolder(View itemView) {
         super(itemView);
-        linear = (LinearLayout)itemView.findViewById(R.id.linear);
-        title = (TextView)itemView.findViewById(R.id.rowTitleTextView);
-        limit = (TextView)itemView.findViewById(R.id.rowLimitTextView);
+        linear = (LinearLayout) itemView.findViewById(R.id.linear);
+        title = (TextView) itemView.findViewById(R.id.rowTitleTextView);
+        limit = (TextView) itemView.findViewById(R.id.rowLimitTextView);
     }
 
     public TextView getTitle() {

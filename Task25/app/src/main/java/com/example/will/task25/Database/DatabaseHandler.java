@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.example.will.task25.RowData;
 
@@ -17,7 +18,7 @@ import java.util.List;
 public class DatabaseHandler {
 
 
-    public static long insert(SQLiteDatabase db, String title, String content ){
+    public static long insert(SQLiteDatabase db, String title, String content) {
         String nowDate = getNowDate();
         String limited = getLimitDateFrom(nowDate);
 
@@ -29,19 +30,17 @@ public class DatabaseHandler {
         contentValues.put(FeedReaderContract.FeedEntry.COLUMN_LIMIT_DATE, limited);
         contentValues.put(FeedReaderContract.FeedEntry.COLUMN_DELETE_FLG, 0);
 
-        long ret;
+        long ret = -1L;
         try {
             ret = db.insert(FeedReaderContract.FeedEntry.TABLE_TODO, null, contentValues);
-        } finally {
-//            if(db.isOpen()) {
-//                db.close();
-//            }
+        } catch (Exception e) {
+            Log.e("DatabaseError", e.getMessage());
         }
 
         return ret;
     }
 
-    public static int update(SQLiteDatabase db,int todoID, String title, String content){
+    public static int update(SQLiteDatabase db, int todoID, String title, String content) {
         String nowDate = getNowDate();
         String limited = getLimitDateFrom(nowDate);
 
@@ -52,22 +51,20 @@ public class DatabaseHandler {
         contentValues.put(FeedReaderContract.FeedEntry.COLUMN_LIMIT_DATE, limited);
 
 
-        int ret;
+        int ret = -1;
         try {
             String whereClause = FeedReaderContract.FeedEntry.COLUMN_TODO_ID + " = ?";
             String[] whereArgs = {String.valueOf(todoID)};
 
-            ret = db.update(FeedReaderContract.FeedEntry.TABLE_TODO,contentValues,whereClause,whereArgs);
-        } finally {
-//            if(db.isOpen()) {
-//                db.close();
-//            }
+            ret = db.update(FeedReaderContract.FeedEntry.TABLE_TODO, contentValues, whereClause, whereArgs);
+        } catch (Exception e) {
+            Log.e("DatabaseError", e.getMessage());
         }
 
         return ret;
     }
 
-    public static List<RowData> select(SQLiteDatabase db){
+    public static List<RowData> select(SQLiteDatabase db) {
         List<RowData> todoList = new ArrayList<>();
 
         String sql = "select * from " + FeedReaderContract.FeedEntry.TABLE_TODO +
@@ -81,7 +78,7 @@ public class DatabaseHandler {
                 String content = cursor.getString(2);
                 String limit = cursor.getString(5);
 
-                RowData todo = new RowData(todoID,title,content,limit);
+                RowData todo = new RowData(todoID, title, content, limit);
                 todoList.add(todo);
             }
 
@@ -92,37 +89,35 @@ public class DatabaseHandler {
         return todoList;
     }
 
-    public static int delete(SQLiteDatabase db,int todoID){
+    public static int delete(SQLiteDatabase db, int todoID) {
         ContentValues contentValues = new ContentValues();
         contentValues.put(FeedReaderContract.FeedEntry.COLUMN_DELETE_FLG, 1);
 
-        int ret;
+        int ret = -1;
         try {
             String whereClause = FeedReaderContract.FeedEntry.COLUMN_TODO_ID + " = ?";
             String[] whereArgs = {String.valueOf(todoID)};
-            ret = db.update(FeedReaderContract.FeedEntry.TABLE_TODO,contentValues, whereClause, whereArgs);
-        } finally {
-//            if(db.isOpen()) {
-//                db.close();
-//            }
+            ret = db.update(FeedReaderContract.FeedEntry.TABLE_TODO, contentValues, whereClause, whereArgs);
+        } catch (Exception e) {
+            Log.e("DatabaseError", e.getMessage());
         }
 
         return ret;
     }
 
-    private static String getNowDate(){
+    private static String getNowDate() {
         @SuppressLint("SimpleDateFormat") DateFormat df = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
         Date date = new Date(System.currentTimeMillis());
         return df.format(date);
     }
 
-    private static String getLimitDateFrom(String dateStr){
+    private static String getLimitDateFrom(String dateStr) {
         Calendar calendar = Calendar.getInstance();
         DateFormat df = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 
         Date date = new Date(dateStr);
         calendar.setTime(date);
-        calendar.add(Calendar.DATE,7);
+        calendar.add(Calendar.DATE, 7);
         Date limitDate = new Date(calendar.getTimeInMillis());
         return df.format(limitDate);
     }

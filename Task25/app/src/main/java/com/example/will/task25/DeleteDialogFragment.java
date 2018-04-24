@@ -10,15 +10,16 @@ import android.os.Bundle;
 
 public class DeleteDialogFragment extends DialogFragment {
 
-    interface DeleteDialogListener{
+    interface DeleteDialogListener {
         void onClickOk();
     }
 
     private DeleteDialogListener listener;
 
-    void setListener(DeleteDialogListener listener){
+    void setListener(DeleteDialogListener listener) {
         this.listener = listener;
     }
+
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         // Use the Builder class for convenient dialog construction
@@ -26,7 +27,7 @@ public class DeleteDialogFragment extends DialogFragment {
         builder.setMessage("削除しますか")
                 .setPositiveButton("OK", new OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        if(listener != null){
+                        if (listener != null) {
                             listener.onClickOk();
                         }
                     }

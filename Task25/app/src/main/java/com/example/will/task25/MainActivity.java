@@ -19,7 +19,7 @@ import com.example.will.task25.TodoRecyclerViewAdapter.TodoAdapterListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements TodoAdapterListener,DeleteDialogFragment.DeleteDialogListener{
+public class MainActivity extends AppCompatActivity implements TodoAdapterListener, DeleteDialogFragment.DeleteDialogListener {
     private TodoRecyclerViewAdapter adapter;
     private int position;
     private List<RowData> todoList;
@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity implements TodoAdapterListen
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplication(), InputActivity.class);
-                intent.putExtra("status","newTodo");
+                intent.putExtra("status", "newTodo");
                 startActivity(intent);
             }
         });
@@ -59,22 +59,23 @@ public class MainActivity extends AppCompatActivity implements TodoAdapterListen
     }
 
 
-    private void reloadList(){
+    private void reloadList() {
         todoList = new ArrayList<>();
         //rawQueryメソッドでデータを取得
         DatabaseHelper dbHelper = new DatabaseHelper(this);
         SQLiteDatabase db = dbHelper.getReadableDatabase();
-       todoList =  DatabaseHandler.select(db);
+        todoList = DatabaseHandler.select(db);
 
 
         adapter.setTodoList(todoList);
         adapter.notifyDataSetChanged();
     }
+
     @Override
     public void selectedTodo(RowData todo) {
         Intent intent = new Intent(getApplication(), InputActivity.class);
-        intent.putExtra("status","updateTodo");
-        intent.putExtra("todo",todo);
+        intent.putExtra("status", "updateTodo");
+        intent.putExtra("todo", todo);
         startActivity(intent);
     }
 
@@ -83,7 +84,7 @@ public class MainActivity extends AppCompatActivity implements TodoAdapterListen
         this.position = position;
         DeleteDialogFragment dialogFragment = new DeleteDialogFragment();
         dialogFragment.setListener(this);
-        dialogFragment.show(getFragmentManager(),"delete");
+        dialogFragment.show(getFragmentManager(), "delete");
     }
 
     @Override
@@ -96,11 +97,11 @@ public class MainActivity extends AppCompatActivity implements TodoAdapterListen
         DatabaseHelper dbHelper = new DatabaseHelper(this);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         int ret;
-        ret = DatabaseHandler.delete(db,todoList.get(position).getTodoID());
+        ret = DatabaseHandler.delete(db, todoList.get(position).getTodoID());
 
         reloadList();
 
-        if (ret == -1){
+        if (ret == -1) {
             Toast.makeText(this, "Delete失敗", Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(this, "Delete成功", Toast.LENGTH_SHORT).show();
