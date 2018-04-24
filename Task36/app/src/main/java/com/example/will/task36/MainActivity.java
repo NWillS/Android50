@@ -47,17 +47,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void failure(TwitterException exception) {
                 // Do something on failure
-                Toast.makeText(getApplication(),"連携してください。",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplication(), "連携してください。", Toast.LENGTH_SHORT).show();
             }
         });
 
-        if (TwitterCore.getInstance().getSessionManager().getActiveSession() != null){
-            goNextActivity();
-        }
+        TwitterCore.getInstance().getSessionManager().clearActiveSession();
     }
 
-    private void goNextActivity(){
-        Intent intent = new Intent(getApplication(),PostImage.class);
+    private void goNextActivity() {
+        Intent intent = new Intent(getApplication(), PostImage.class);
         startActivity(intent);
     }
 

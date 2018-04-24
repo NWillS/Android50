@@ -65,19 +65,29 @@ public class PostImage extends AppCompatActivity {
         setContentView(R.layout.activity_post_image);
         permission();
 
-        registerReceiver(myResultReceiver,new IntentFilter("com.twitter.sdk.android.tweetcomposer.UPLOAD_SUCCESS"));
-        registerReceiver(myResultReceiver,new IntentFilter("com.twitter.sdk.android.tweetcomposer.UPLOAD_FAILURE"));
-        registerReceiver(myResultReceiver,new IntentFilter("com.twitter.sdk.android.tweetcomposer.TWEET_COMPOSE_CANCEL"));
+        registerReceiver(myResultReceiver, new IntentFilter("com.twitter.sdk.android.tweetcomposer.UPLOAD_SUCCESS"));
+        registerReceiver(myResultReceiver, new IntentFilter("com.twitter.sdk.android.tweetcomposer.UPLOAD_FAILURE"));
+        registerReceiver(myResultReceiver, new IntentFilter("com.twitter.sdk.android.tweetcomposer.TWEET_COMPOSE_CANCEL"));
 
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         Button postButton = findViewById(R.id.postButton);
         postButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                permission();
                 showGallery();
             }
         });
+
+        findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TwitterCore.getInstance().getSessionManager().clearActiveSession();
+                finish();
+            }
+        });
     }
+
     private void showGallery() {
 
         //カメラの起動Intentの用意
@@ -105,7 +115,7 @@ public class PostImage extends AppCompatActivity {
         startActivityForResult(intent, REQUEST_CHOOSER);
     }
 
-    private void permission(){
+    private void permission() {
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -115,7 +125,7 @@ public class PostImage extends AppCompatActivity {
                     Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
             } else {
                 ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},1111);
+                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1111);
 
             }
         }
@@ -148,6 +158,7 @@ public class PostImage extends AppCompatActivity {
             );
             TwitterSession session = TwitterCore.getInstance().getSessionManager()
                     .getActiveSession();
+            Log.i("userID", String.valueOf(session.getUserId()));
             Intent intent = new ComposerActivity.Builder(getApplication())
                     .session(session)
                     .image(resultUri)
@@ -159,7 +170,7 @@ public class PostImage extends AppCompatActivity {
         }
     }
 
-    private void stopProgressBar(){
+    private void stopProgressBar() {
         progressBar.setVisibility(View.GONE);
     }
 }
