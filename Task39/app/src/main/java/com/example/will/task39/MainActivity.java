@@ -2,17 +2,11 @@ package com.example.will.task39;
 
 import android.Manifest;
 import android.content.ContentResolver;
-import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.hardware.Camera;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -41,6 +35,11 @@ public class MainActivity extends AppCompatActivity {
 
     private boolean mPermissionReady;
     private boolean cameraPreviewing;
+
+    private Camera myCamera;
+    private SurfaceView mySurfaceView;
+
+    private final SimpleDateFormat photoName = new SimpleDateFormat("yyy-MM-dd-HHmmss", Locale.JAPAN);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,11 +71,9 @@ public class MainActivity extends AppCompatActivity {
                         holder.addCallback(mSurfaceListener);
                         holder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
 
-                        // センサーを取得する
-                        mySensor = (SensorManager)getSystemService(SENSOR_SERVICE);
-                        imageView.setVisibility(View.GONE);
                         mySurfaceView.setVisibility(View.VISIBLE);
-                        button.setText("撮影");
+                        imageView.setVisibility(View.GONE);
+                        button.setText(R.string.flush);
                         cameraPreviewing = true;
                     }
                 }
@@ -112,27 +109,6 @@ public class MainActivity extends AppCompatActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
-
-    private Camera myCamera;
-    private SurfaceView mySurfaceView;
-
-    private final SimpleDateFormat photoName = new SimpleDateFormat("yyy-MM-dd-HHmmss", Locale.JAPAN);
-
-    private SensorManager mySensor;
-
-    private static final int MATRIX_SIZE = 16;
-    private static final int DIMENSION = 3;
-
-    private float[] magneticValues = new float[DIMENSION];
-    private float[] accelerometerValues = new float[DIMENSION];
-    private final float[] orientationValues = new float[DIMENSION];
-
-
-
     private final Camera.PictureCallback mPictureListener =
             new Camera.PictureCallback() {
 
@@ -148,35 +124,14 @@ public class MainActivity extends AppCompatActivity {
                     int width = tmp_bitmap.getWidth();
                     int height = tmp_bitmap.getHeight();
 
-                    // 画像データを回転する
-                    int rad_y = radianToDegree(orientationValues[2]);
                     Matrix matrix = new Matrix();
-                    if ((rad_y > -45 && rad_y <= 0) || (rad_y > 0 && rad_y <= 45)) {
-                        matrix.setRotate(90.0F);
-                    } else if (rad_y > 45 && rad_y <= 135) {
-                        matrix.setRotate(180.0F);
-                    } else if ((rad_y > 135 && rad_y <= 180) || (rad_y >= -180 && rad_y <= -135)) {
-                        matrix.setRotate(-90.0F);
-                    } else if (rad_y > -135 && rad_y <= -45) {
-                        matrix.setRotate(0);
-                    }
+                    matrix.setRotate(90.0F);
 
                     Log.i("Cam",width + " , " + height);
 
                     // 画像データを保存する
                     Bitmap temp_bitmap = Bitmap.createBitmap(tmp_bitmap, 0, 0, width, height, matrix, true);
-//
-//                    int temp_width = (width * svWidth) / cWidth ;
-//                    Log.i("Cam", temp_width + " : " + width );
-//                    Bitmap bitmap;
-//                    if(isPortrait()) {
-//                        bitmap = Bitmap.createBitmap(temp_bitmap, 0, 0, temp_width, width, null, true);
-//                    } else{
-//                        bitmap = Bitmap.createBitmap(temp_bitmap, 0, 0, width,temp_width , null, true);
-//                    }
-//
-//                    Log.i("Cam", String.valueOf(cWidth));
-//                    Log.i("Cam", String.valueOf(svWidth));
+
 
                     imageView.setImageBitmap(temp_bitmap);
                     imageView.setVisibility(View.VISIBLE);
@@ -200,12 +155,13 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void surfaceCreated(SurfaceHolder holder) {
                     myCamera = Camera.open();
+                    String errTag = "System.err";
                     try {
                         myCamera.setPreviewDisplay(holder);
                     } catch (IOException e) {
-                        Log.e("System.err",e.getMessage());
+                        Log.e(errTag,e.getMessage());
                     } catch (RuntimeException e) {
-                        Log.e("System.err",e.getMessage());
+                        Log.e(errTag,e.getMessage());
                     }
                 }
 
@@ -215,13 +171,8 @@ public class MainActivity extends AppCompatActivity {
 
                     Camera.Parameters parameters = myCamera.getParameters();
 
-                    // 画面の向きを設定
-                    boolean portrait = isPortrait();
-                    if (portrait) {
-                        myCamera.setDisplayOrientation(90);
-                    } else {
-                        myCamera.setDisplayOrientation(0);
-                    }
+                    myCamera.setDisplayOrientation(90);
+
 
                     // 対応するプレビューサイズ・保存サイズを取得する
                     List<Camera.Size> previewSizes = parameters.getSupportedPreviewSizes();
@@ -230,35 +181,21 @@ public class MainActivity extends AppCompatActivity {
                     Camera.Size previewSize = getOptimalPreviewSize(previewSizes, width, height);
                     Camera.Size pictureSize = pictureSizes.get(0);
 
-                    Log.d("CameraTest", "surface = " +
-                            String.valueOf(width) + " , " +
-                            String.valueOf(height));
                     if (previewSize == null) {
                         throw new AssertionError();
                     }
-                    Log.d("CameraTest", "preview = " +
-                            String.valueOf(previewSize.width) + " , " +
-                            String.valueOf(previewSize.height));
-                    Log.d("CameraTest", "picture = " +
-                            String.valueOf(pictureSize.width) + " , " +
-                            String.valueOf(pictureSize.height));
 
                     parameters.setPreviewSize(previewSize.width, previewSize.height);
                     parameters.setPictureSize(pictureSize.width, pictureSize.height);
 
-                    // カメラプレビューレイアウトの設定
-//                    int previewWidth = previewSize.width;
+
                     int previewWidth = getWindowManager().getDefaultDisplay().getHeight();
-//                    int previewHeight = previewSize.height;
                     int previewHeight = getWindowManager().getDefaultDisplay().getWidth();
                     android.view.ViewGroup.LayoutParams layoutParams = mySurfaceView.getLayoutParams();
-                    if (portrait) {
-                        layoutParams.width = previewHeight;
-                        layoutParams.height = previewWidth;
-                    } else {
-                        layoutParams.width = previewWidth;
-                        layoutParams.height = previewHeight;
-                    }
+
+                    layoutParams.width = previewHeight;
+                    layoutParams.height = previewWidth;
+
                     mySurfaceView.setLayoutParams(layoutParams);
 
                     // パラメータを設定してカメラを再開
@@ -277,57 +214,6 @@ public class MainActivity extends AppCompatActivity {
                 public void onAutoFocus(boolean success, Camera camera) { }
             };
 
-    /**
-     * センサー制御
-     */
-    private final SensorEventListener mSensorEventListener =
-            new SensorEventListener() {
-
-                @Override
-                public void onSensorChanged(SensorEvent event) {
-                    if (event.accuracy == SensorManager.SENSOR_STATUS_UNRELIABLE) {
-                        return;
-                    }
-
-                    switch (event.sensor.getType()) {
-                        case Sensor.TYPE_MAGNETIC_FIELD:
-                            // 地磁気センサ
-                            magneticValues = event.values.clone();
-                            break;
-                        case Sensor.TYPE_ACCELEROMETER:
-                            // 加速度センサ
-                            accelerometerValues = event.values.clone();
-                            break;
-
-                        default:
-                            break;
-
-                    }
-
-                    if (magneticValues != null && accelerometerValues != null) {
-                        float[] rotationMatrix = new float[MATRIX_SIZE];
-                        float[] inclinationMatrix = new float[MATRIX_SIZE];
-
-                        // 加速度センサと地磁気センタから回転行列を取得
-                        SensorManager.getRotationMatrix(rotationMatrix, inclinationMatrix, accelerometerValues, magneticValues);
-
-                        float[] remapedMatrix = new float[MATRIX_SIZE];
-                        SensorManager.remapCoordinateSystem(rotationMatrix, SensorManager.AXIS_X, SensorManager.AXIS_Z, remapedMatrix);
-                        SensorManager.getOrientation(remapedMatrix, orientationValues);
-                    }
-                }
-
-                @Override
-                public void onAccuracyChanged(Sensor sensor, int accuracy) { }
-            };
-
-    /**
-     * 画面の向きを取得する
-     */
-    private boolean isPortrait() {
-        return (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT);
-    }
-
     @Nullable
     private Camera.Size getOptimalPreviewSize(List<Camera.Size> sizes, int w, int h) {
         double targetRatio = (double) w / h;
@@ -343,12 +229,12 @@ public class MainActivity extends AppCompatActivity {
         for (Camera.Size size : sizes) {
             double ratio = (double) size.width / size.height;
             if (Math.abs(ratio - targetRatio) > ASPECT_TOLERANCE) {
-                continue;
+                if (Math.abs(size.height - h) < minDiff) {
+                    optimalSize = size;
+                    minDiff = Math.abs(size.height - h);
+                }
             }
-            if (Math.abs(size.height - h) < minDiff) {
-                optimalSize = size;
-                minDiff = Math.abs(size.height - h);
-            }
+
         }
 
         // Cannot find the one match the aspect ratio, ignore the requirement
@@ -379,31 +265,5 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         return true;
-    }
-
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        if(cameraPreviewing) {
-            // 地磁気センサ
-            mySensor.registerListener(mSensorEventListener,
-                    mySensor.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD),
-                    SensorManager.SENSOR_DELAY_UI);
-
-            // 加速度センサ
-            mySensor.registerListener(mSensorEventListener,
-                    mySensor.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
-                    SensorManager.SENSOR_DELAY_UI);
-        }
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        if(cameraPreviewing) {
-            mySensor.unregisterListener(mSensorEventListener);
-        }
     }
 }
