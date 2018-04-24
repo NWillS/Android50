@@ -12,6 +12,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -29,20 +30,41 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
     private LocationManager mLocationManager;
 
+    private boolean isUpdating;
+    private Button button;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.e(TAG, "onCreate");
         setContentView(R.layout.activity_main);
 
-        mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
-        findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
+        button = (Button) findViewById(R.id.button);
+
+        button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                requestLocationUpdates();
+                if (isUpdating) {
+                    button.setText("START");
+                    isUpdating = false;
+                    stopGPS();
+                } else {
+                    button.setText("STOP");
+                    isUpdating = true;
+                    requestLocationUpdates();
+                }
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        button.setText("START");
+        isUpdating = false;
+
+        mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
     }
 
     // Called when the location has changed.
@@ -114,8 +136,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                     != PackageManager.PERMISSION_GRANTED &&
                     ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
                             != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION
-                        , Manifest.permission.ACCESS_COARSE_LOCATION},1010);
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION
+                        , Manifest.permission.ACCESS_COARSE_LOCATION}, 1010);
 
                 return;
             }
@@ -142,24 +164,39 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         DateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss:SSS", Locale.JAPAN);
         String dateFormatted = formatter.format(date);
 
-        Log.i("System.out",String.format("%s緯度：%f、経度：%f",dateFormatted,latitude,longitude));
+        Log.i("System.out", String.format("%s緯度：%f、経度：%f", dateFormatted, latitude, longitude));
     }
 
     private void showMessage(String message) {
-        Log.i("System.out",message);
+        Log.i("System.out", message);
     }
 
     private void showProvider(String provider) {
-        Log.i("System.out","Provider : " + provider);
+        Log.i("System.out", "Provider : " + provider);
     }
 
     private void showNetworkEnabled(boolean isNetworkEnabled) {
-        Log.i("System.out","NetworkEnabled : " + String.valueOf(isNetworkEnabled));
+        Log.i("System.out", "NetworkEnabled : " + String.valueOf(isNetworkEnabled));
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        mLocationManager.removeUpdates(this);
+    protected void onPause() {
+        stopGPS();
+        super.onPause();
+    }
+
+    private void stopGPS() {
+        if (mLocationManager != null) {
+            Log.d("LocationActivity", "locationManager.removeUpdates");
+            // update を止める
+            if (ActivityCompat.checkSelfPermission(this,
+                    Manifest.permission.ACCESS_FINE_LOCATION) !=
+                    PackageManager.PERMISSION_GRANTED) {
+                return;
+            }
+            mLocationManager.removeUpdates(this);
+            mLocationManager = null;
+            Log.i("System.out", "StoppedGPS");
+        }
     }
 }
