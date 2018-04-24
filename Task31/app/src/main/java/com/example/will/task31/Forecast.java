@@ -1,6 +1,15 @@
-package com.example.will.task31.api.model;
+package com.example.will.task31;
 
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
+import android.arch.persistence.room.TypeConverter;
+
+import com.example.will.task31.api.model.Image;
+
+@Entity
 public class Forecast {
+    @PrimaryKey(autoGenerate = true)
+    private long uid;
     private String dateLabel;
     private String telop;
     private String date;
@@ -36,5 +45,13 @@ public class Forecast {
 
     public Image getImage() {
         return this.image;
+    }
+
+    public long getUid() {
+        return this.uid;
+    }
+
+    public void setUid(long uid) {
+        this.uid = uid;
     }
 }

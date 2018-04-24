@@ -3,8 +3,8 @@ package com.example.will.task31.db;
 
 import android.os.AsyncTask;
 
-import com.example.will.task31.ForecastData;
 import com.example.will.task31.MainActivity;
+import com.example.will.task31.Forecast;
 
 import java.lang.ref.WeakReference;
 import java.text.SimpleDateFormat;
@@ -27,24 +27,19 @@ public class SelectTask extends AsyncTask<Void,Void,ResponseData> {
     @Override
     protected ResponseData doInBackground(Void... voids) {
         ResponseData res = new ResponseData();
-        res.setForecastDataList(new ArrayList<ForecastData>());
         String description = activityReference.get()
                 .getForecastDB()
                 .description_dao()
                 .getNewest()
-                .getDescription();
+                .getText();
         res.setDescription(description);
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd", Locale.JAPAN);
         String nowDate = sdf.format(Calendar.getInstance().getTime());
 
-        List<ForecastEntity> forecastEntities = activityReference.get().getForecastDB().forecast_dao().getNewest(nowDate);
-        for(ForecastEntity forecastEntity : forecastEntities){
-            ForecastData forecastData = new ForecastData(forecastEntity.getDateLabel(),
-                    forecastEntity.getTelop(),forecastEntity.getImage());
+        List<Forecast> forecastEntities = activityReference.get().getForecastDB().forecast_dao().getNewest(nowDate);
+        res.setForecastList(forecastEntities);
 
-            res.getForecastDataList().add(forecastData);
-        }
         return res;
     }
 

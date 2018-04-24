@@ -1,12 +1,12 @@
 package com.example.will.task31.db;
 
-import com.example.will.task31.ForecastData;
+import com.example.will.task31.Forecast;
 
 import java.util.List;
 
 public class ResponseData {
     private String description;
-    private List<ForecastData> forecastDataList;
+    private List<Forecast> forecastList;
 
     public String getDescription() {
         return this.description;
@@ -16,11 +16,11 @@ public class ResponseData {
         this.description = description;
     }
 
-    public List<ForecastData> getForecastDataList() {
-        return this.forecastDataList;
+    public List<Forecast> getForecastDataList() {
+        return this.forecastList;
     }
 
-    public void setForecastDataList(List<ForecastData> forecastDataList) {
-        this.forecastDataList = forecastDataList;
+    public void setForecastList(List<Forecast> forecastList) {
+        this.forecastList = forecastList;
     }
 }

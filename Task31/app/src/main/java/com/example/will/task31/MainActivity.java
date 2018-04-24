@@ -10,16 +10,13 @@ import android.widget.TextView;
 
 
 import com.example.will.task31.api.WeatherApi;
-import com.example.will.task31.api.model.Forecast;
+import com.example.will.task31.api.model.Description;
 import com.example.will.task31.api.model.Weather;
 import com.example.will.task31.db.ForecastDatabase;
-import com.example.will.task31.db.DescriptionEntity;
-import com.example.will.task31.db.ForecastEntity;
 import com.example.will.task31.db.InsertTask;
 import com.example.will.task31.db.ResponseData;
 import com.example.will.task31.db.SelectTask;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -62,18 +59,10 @@ public class MainActivity extends AppCompatActivity implements WeatherApi.Weathe
         if (weather != null) {
             List<Forecast> forecasts = weather.getForecasts();
 
-            DescriptionEntity descriptionEntity = new DescriptionEntity();
-            descriptionEntity.setDescription(weather.getDescription().getText());
-            List<ForecastEntity> forecastEntities = new ArrayList<>();
-            for(Forecast forecast : forecasts){
-                ForecastEntity entity = new ForecastEntity();
-                entity.setDateLabel(forecast.getDateLabel());
-                entity.setTelop(forecast.getTelop());
-                entity.setImage(forecast.getImage().getUrl());
+            Description description = new Description();
+            description.setText(weather.getDescription().getText());
 
-                forecastEntities.add(entity);
-            }
-            InsertTask insertTask = new InsertTask(this, descriptionEntity, forecastEntities);
+            InsertTask insertTask = new InsertTask(this, description, forecasts);
 
 
             insertTask.execute();

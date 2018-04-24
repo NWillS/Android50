@@ -4,18 +4,20 @@ import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
 
+import com.example.will.task31.Forecast;
+
 import java.util.List;
 
 @Dao
 public interface Forecast_Dao {
 
-    @Query("SELECT * FROM forecastEntity WHERE getDate = :getDate ORDER BY getDate desc")
-    List<ForecastEntity> getNewest(String getDate);
+    @Query("SELECT * FROM forecast WHERE date = :date ORDER BY date desc")
+    List<Forecast> getNewest(String date);
 
     @Insert
-    void insertEntity(ForecastEntity forecastEntity);
+    void insertEntity(Forecast forecastEntity);
 
-    @Query("DELETE FROM forecastEntity")
+    @Query("DELETE FROM forecast")
     void deleteALL();
 
 }
