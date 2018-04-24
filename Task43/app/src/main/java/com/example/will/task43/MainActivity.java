@@ -11,7 +11,10 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements MusicListRecycleViewAdapter.MusicListListener,MediaPlayer.OnCompletionListener {
+public class MainActivity extends AppCompatActivity
+        implements MusicListRecycleViewAdapter.MusicListListener,
+        MediaPlayer.OnCompletionListener {
+
     private MediaPlayer mediaPlayer;
     private MusicListRecycleViewAdapter adapter;
     private List<RowData> musicList;
@@ -27,6 +30,7 @@ public class MainActivity extends AppCompatActivity implements MusicListRecycleV
 
         LinearLayoutManager llm = new LinearLayoutManager(this);
         rv.setHasFixedSize(true);
+        rv.getItemAnimator().setChangeDuration(0);
         rv.setLayoutManager(llm);
         rv.setAdapter(adapter);
 
@@ -68,7 +72,7 @@ public class MainActivity extends AppCompatActivity implements MusicListRecycleV
 
 
     private void reload(){
-        adapter.notifyItemRangeChanged(0, musicList.size());
+        adapter.notifyItemRangeChanged(0,musicList.size());
     }
 
     @Override
