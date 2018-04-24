@@ -55,12 +55,8 @@ public class MainActivity extends AppCompatActivity implements WeatherApi.Weathe
         if (weather != null) {
             description.setText(weather.getDescription().getText());
             List<Forecast> forecasts = weather.getForecasts();
-            List<ForecastData> forecastDataList = new ArrayList<>();
-            for (Forecast forecast : forecasts){
-                ForecastData data = new ForecastData(forecast.getDateLabel(),forecast.getTelop(),forecast.getImage().getUrl());
-                forecastDataList.add(data);
-            }
-            adapter.setForecasts(forecastDataList);
+
+            adapter.setForecasts(forecasts);
             adapter.notifyDataSetChanged();
         }
     }
