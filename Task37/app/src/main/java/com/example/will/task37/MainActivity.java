@@ -30,6 +30,17 @@ public class MainActivity extends AppCompatActivity {
                     toEditText.setError("Please enter destination");
                     return;
                 }
+                boolean check = false;
+                for(char c : to.toCharArray()){
+                    if(c == '@'){
+                        check = true;
+                        break;
+                    }
+                }
+                if(!check){
+                    toEditText.setError("not have '@' ");
+                    return;
+                }
 
                 String title = titleEditText.getText().toString();
                 if(title.isEmpty()){
