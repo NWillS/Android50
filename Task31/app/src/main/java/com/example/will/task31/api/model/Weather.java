@@ -5,6 +5,7 @@ import java.util.List;
 public class Weather {
     private List<Forecast> forecasts;
     private Location location;
+    private Description description;
 
     public List<Forecast> getForecasts() {
         return this.forecasts;
@@ -14,11 +15,19 @@ public class Weather {
         return this.location;
     }
 
+    public Description getDescription() {
+        return this.description;
+    }
+
     public void setForecasts(List<Forecast> forecasts) {
         this.forecasts = forecasts;
     }
 
     public void setLocation(Location location) {
         this.location = location;
+    }
+
+    public void setDescription(Description description) {
+        this.description = description;
     }
 }
