@@ -34,13 +34,11 @@ public class  InsertTask extends AsyncTask<Void,Void,Boolean> {
         // retrieve auto incremented note id
 
         activityReference.get().getForecastDB().forecast_dao().deleteALL();
+        activityReference.get().getForecastDB().description_dao().deleteALL();
+
+
         activityReference.get().getForecastDB().description_dao().insertEntity(description);
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd", Locale.JAPAN);
-        String nowDate = sdf.format(Calendar.getInstance().getTime());
-
-
         for(Forecast forecastEntity : forecastEntities){
-            forecastEntity.setDate(nowDate);
             activityReference.get().getForecastDB().forecast_dao().insertEntity(forecastEntity);
         }
         return true;

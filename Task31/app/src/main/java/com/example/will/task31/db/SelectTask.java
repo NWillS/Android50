@@ -34,10 +34,8 @@ public class SelectTask extends AsyncTask<Void,Void,ResponseData> {
                 .getText();
         res.setDescription(description);
 
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd", Locale.JAPAN);
-        String nowDate = sdf.format(Calendar.getInstance().getTime());
 
-        List<Forecast> forecastEntities = activityReference.get().getForecastDB().forecast_dao().getNewest(nowDate);
+        List<Forecast> forecastEntities = activityReference.get().getForecastDB().forecast_dao().getNewest();
         res.setForecastList(forecastEntities);
 
         return res;

@@ -9,10 +9,13 @@ import com.example.will.task31.api.model.Description;
 @Dao
 public interface Description_Dao {
 
-    @Query("SELECT * FROM description ORDER BY uid DESC LIMIT 1")
+    @Query("SELECT * FROM description")
     Description getNewest();
 
     @Insert
     void insertEntity(Description descriptionEntity);
+
+    @Query("DELETE FROM description")
+    void deleteALL();
 
 }

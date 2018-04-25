@@ -11,8 +11,8 @@ import java.util.List;
 @Dao
 public interface Forecast_Dao {
 
-    @Query("SELECT * FROM forecast WHERE date = :date ORDER BY date desc")
-    List<Forecast> getNewest(String date);
+    @Query("SELECT * FROM forecast ORDER BY date")
+    List<Forecast> getNewest();
 
     @Insert
     void insertEntity(Forecast forecastEntity);
