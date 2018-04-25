@@ -181,11 +181,15 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
     @Override
     protected void onPause() {
-        stopGPS();
+        destroyLM();
         super.onPause();
     }
 
-    private void stopGPS() {
+    private void stopGPS(){
+        mLocationManager.removeUpdates(this);
+    }
+
+    private void destroyLM() {
         if (mLocationManager != null) {
             Log.d("LocationActivity", "locationManager.removeUpdates");
             // update を止める
@@ -194,7 +198,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                     PackageManager.PERMISSION_GRANTED) {
                 return;
             }
-            mLocationManager.removeUpdates(this);
+            stopGPS();
             mLocationManager = null;
             Log.i("System.out", "StoppedGPS");
         }
