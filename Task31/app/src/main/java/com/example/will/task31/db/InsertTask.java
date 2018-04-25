@@ -32,11 +32,12 @@ public class  InsertTask extends AsyncTask<Void,Void,Boolean> {
     @Override
     protected Boolean doInBackground(Void... objs) {
         // retrieve auto incremented note id
+
+        activityReference.get().getForecastDB().forecast_dao().deleteALL();
         activityReference.get().getForecastDB().description_dao().insertEntity(description);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd", Locale.JAPAN);
         String nowDate = sdf.format(Calendar.getInstance().getTime());
 
-        activityReference.get().getForecastDB().forecast_dao().deleteALL();
 
         for(Forecast forecastEntity : forecastEntities){
             forecastEntity.setDate(nowDate);
