@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
-@SuppressWarnings({"UnqualifiedFieldAccess", "UnnecessarilyQualifiedInnerClassAccess", "AssignmentOrReturnOfFieldWithMutableType"})
+
 class UserListRecycleViewAdapter extends RecyclerView.Adapter<UserListViewHolder> {
     private List<User> userList = new ArrayList<>();
     @NonNull

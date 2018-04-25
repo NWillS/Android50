@@ -1,6 +1,5 @@
 package com.example.will.task48;
 
-@SuppressWarnings("UnqualifiedFieldAccess")
 class User {
     private String name;
     private String age;

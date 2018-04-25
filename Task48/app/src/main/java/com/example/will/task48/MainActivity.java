@@ -14,7 +14,6 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-@SuppressWarnings({"UnqualifiedFieldAccess", "UnnecessarilyQualifiedInnerClassAccess"})
 public class MainActivity extends AppCompatActivity {
     private List<User> userList;
 
@@ -42,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
                     String name = (String) snapshot.child("name").getValue();
                     String age = (String) snapshot.child("age").getValue();
 
-                    User user = new User(name,age);
+                    User user = new User(name, age);
                     userList.add(user);
                 }
                 adapter.setUserList(userList);
