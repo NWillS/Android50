@@ -54,7 +54,6 @@ public class WeatherApi {
             @Override
             public void onFailure(Call<Weather> call, Throwable t) {
                 callback.failed();
-                Log.d(TAG, "error");
             }
         });
     }

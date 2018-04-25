@@ -1,5 +1,7 @@
 package com.example.will.task31.api.model;
 
+import com.example.will.task31.Forecast;
+
 import java.util.List;
 
 public class Weather {

@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.bumptech.glide.Glide;
-import com.example.will.task31.api.model.Forecast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +31,7 @@ class ForecastRecyclerViewAdapter extends RecyclerView.Adapter<ForecastViewHolde
 
     @Override
     public void onBindViewHolder(@NonNull ForecastViewHolder holder, int position) {
-        holder.getDateTextView().setText(forecasts.get(position).getDate());
+        holder.getDateTextView().setText(forecasts.get(position).getDateLabel());
         holder.getForecastTextView().setText(forecasts.get(position).getTelop());
         Glide.with(context).load(forecasts.get(position).getImage().getUrl()).into(holder.getIconImageView());
 
