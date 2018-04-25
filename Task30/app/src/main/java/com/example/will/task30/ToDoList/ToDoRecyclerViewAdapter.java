@@ -1,17 +1,22 @@
-package com.example.will.task25;
+package com.example.will.task30.ToDoList;
 
 import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView.Adapter;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.example.will.task30.Database.ToDoData;
+import com.example.will.task30.R;
+
 import java.util.List;
 
-class TodoRecyclerViewAdapter extends Adapter<TodoViewHolder> {
-    private List<RowData> todoList;
+public class ToDoRecyclerViewAdapter extends RecyclerView.Adapter<ToDoViewHolder> {
+    private List<ToDoData> todoList;
 
     interface TodoAdapterListener{
-        void selectedTodo(RowData todo);
+        void selectedTodo(ToDoData todo);
         void onLongClicked(int position);
     }
 
@@ -19,17 +24,17 @@ class TodoRecyclerViewAdapter extends Adapter<TodoViewHolder> {
 
     @NonNull
     @Override
-    public TodoViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ToDoViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View inflate = LayoutInflater.from(parent.getContext()).inflate(R.layout.row, parent,false);
-        return new TodoViewHolder(inflate);
+        return new ToDoViewHolder(inflate);
     }
 
-    public void setTodoList(List<RowData> todoList) {
+    public void setTodoList(List<ToDoData> todoList) {
         this.todoList = todoList;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final TodoViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final ToDoViewHolder holder, int position) {
         holder.getTitle().setText(todoList.get(position).getTitle());
         holder.getLimit().setText(todoList.get(position).getLimit());
 
@@ -37,9 +42,11 @@ class TodoRecyclerViewAdapter extends Adapter<TodoViewHolder> {
             @Override
             public void onClick(View view) {
                 int position = holder.getAdapterPosition();
-                RowData todo = todoList.get(position);
+                ToDoData todo = todoList.get(position);
                 if(listener != null){
                     listener.selectedTodo(todo);
+                } else {
+                    listenerError();
                 }
             }
         });
@@ -51,6 +58,7 @@ class TodoRecyclerViewAdapter extends Adapter<TodoViewHolder> {
                     listener.onLongClicked(position);
                     return true;
                 }
+                listenerError();
                 return false;
             }
         });
@@ -65,4 +73,7 @@ class TodoRecyclerViewAdapter extends Adapter<TodoViewHolder> {
         return todoList.size();
     }
 
+    void listenerError(){
+        Log.e("ListenerError","リスナーがセットされていません。");
+    }
 }
