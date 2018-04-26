@@ -55,12 +55,16 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+        button.setText("START");
+        isUpdating = false;
+    }
 
     @Override
     protected void onPause() {
-        gpsChecker.stopUsingGPS();
+        stopGPS();
         super.onPause();
     }
 
