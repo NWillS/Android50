@@ -33,9 +33,8 @@ public class WeatherApiTest {
         WeatherApi weatherApi =  new WeatherApi(new WeatherApi.WeatherApiCallback() {
             @Override
             public void success(Weather weather) {
-                assertNotNull(weather);
-                assertNotNull(weather.getDescription().getText());
-                assertNotNull(weather.getForecasts());
+                assertEquals(weather.getLocation().getCity(),"東京");
+                assertEquals(weather.getForecasts().get(0).getDateLabel(),"今日");
             }
 
             @Override
