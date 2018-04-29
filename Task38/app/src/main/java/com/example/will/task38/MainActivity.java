@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageView imageView;
 
     private Uri cameraUri;
-    private boolean permission;
+    private boolean permission = false;
 
 
 
@@ -38,14 +38,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
+        checkPermission();
         imageView = (ImageView) findViewById(R.id.imageView);
         Button button = (Button) findViewById(R.id.button);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                permission = checkPermissionREAD_EXTERNAL_STORAGE(getApplicationContext());
+                checkPermission();
                 if(permission) {
                     String filename = System.currentTimeMillis() + ".jpg";
                     ContentValues values = new ContentValues();
@@ -69,31 +68,42 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public boolean checkPermissionREAD_EXTERNAL_STORAGE(final Context context) {
-        int currentAPIVersion = Build.VERSION.SDK_INT;
-        if (currentAPIVersion >= android.os.Build.VERSION_CODES.M) {
-            if (ContextCompat.checkSelfPermission(context,
-                    Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                if (ActivityCompat.shouldShowRequestPermissionRationale(
-                        (Activity) context,
-                        Manifest.permission.READ_EXTERNAL_STORAGE)) {
-                    showDialog("External storage", context,
-                            Manifest.permission.READ_EXTERNAL_STORAGE);
+    public void checkPermission() {
+        // 既に許可している
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.READ_EXTERNAL_STORAGE)
+                == PackageManager.PERMISSION_GRANTED){
+            permission = true;
+        }
+        // 拒否していた場合
+        else{
+            requestPermission();
+        }
+    }
 
-                } else {
-                    ActivityCompat
-                            .requestPermissions(
-                                    (Activity) context,
-                                    new String[] { Manifest.permission.READ_EXTERNAL_STORAGE,
-                                            Manifest.permission.WRITE_EXTERNAL_STORAGE },
-                                    MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
-                }
-                return false;
-            } else {
-                return true;
+    // 許可を求める
+    private void requestPermission() {
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                Manifest.permission.READ_EXTERNAL_STORAGE)) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                ActivityCompat.requestPermissions(MainActivity.this,
+                        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,
+                                Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
             }
+
         } else {
-            return true;
+            Toast toast = Toast.makeText(this,
+                    "許可されないとアプリが実行できません", Toast.LENGTH_SHORT);
+            toast.show();
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,
+                                Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
+            }
+
         }
     }
     @Override
@@ -103,6 +113,7 @@ public class MainActivity extends AppCompatActivity {
             case MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE:
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     // do your stuff
+                    permission = true;
                 } else {
                 }
                 break;
@@ -110,22 +121,5 @@ public class MainActivity extends AppCompatActivity {
                 super.onRequestPermissionsResult(requestCode, permissions,
                         grantResults);
         }
-    }
-    public void showDialog(final String msg, final Context context,
-                           final String permission) {
-        AlertDialog.Builder alertBuilder = new AlertDialog.Builder(context);
-        alertBuilder.setCancelable(true);
-        alertBuilder.setTitle("Permission necessary");
-        alertBuilder.setMessage(msg + " permission is necessary");
-        alertBuilder.setPositiveButton(android.R.string.yes,
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        ActivityCompat.requestPermissions((Activity) context,
-                                new String[] { permission },
-                                MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
-                    }
-                });
-        AlertDialog alert = alertBuilder.create();
-        alert.show();
     }
 }
