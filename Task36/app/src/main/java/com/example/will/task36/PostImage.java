@@ -173,4 +173,10 @@ public class PostImage extends AppCompatActivity {
     private void stopProgressBar() {
         progressBar.setVisibility(View.GONE);
     }
+
+    @Override
+    protected void onDestroy() {
+        unregisterReceiver(myResultReceiver);
+        super.onDestroy();
+    }
 }
