@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 checkPermission();
+                checkGPS();
                 getGPS();
             }
         });
@@ -67,6 +68,14 @@ public class MainActivity extends AppCompatActivity {
             double longitude = gpsChecker.getLongitude();
 
             Log.i("System.out", String.format("緯度：%f、経度：%f", latitude, longitude));
+        } else {
+            Log.i("System.out","cannot get location");
+        }
+    }
+
+    private void checkGPS(){
+        if (!gpsChecker.isGPSEnabled){
+            gpsChecker.showSettingsAlert();
         }
     }
 
