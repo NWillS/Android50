@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Task35</string>
+    <string name="facebook_app_id">982750978561091</string>
+    <string name="fb_login_protocol_scheme">fb982750978561091</string>
+    <string name="postImage">画像投稿</string>
+
+</resources>
