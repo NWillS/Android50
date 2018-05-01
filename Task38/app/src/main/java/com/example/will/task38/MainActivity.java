@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
@@ -16,10 +17,13 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import java.io.IOException;
 
 import static android.provider.MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE;
 
@@ -64,7 +68,22 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == RESULT_CAMERA) {
-            imageView.setImageURI(cameraUri);
+            try {
+                Bitmap image = MediaStore.Images.Media.getBitmap(this.getContentResolver(), cameraUri);
+                int width = image.getWidth();
+                int height = image.getHeight();
+                if(width > height){
+                    Matrix mat = new Matrix();
+                    mat.postRotate(90);
+
+                    Bitmap bmp = Bitmap.createBitmap(image, 0, 0, width, height, mat, true);
+                    imageView.setImageBitmap(bmp);
+                } else {
+                    imageView.setImageURI(cameraUri);
+                }
+            } catch (IOException e) {
+                Log.e("System.err",e.getMessage());
+            }
         }
     }
 
