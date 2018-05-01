@@ -10,7 +10,6 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-@SuppressWarnings("UnnecessarilyQualifiedInnerClassAccess")
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     @Override
@@ -37,7 +36,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
 
         LatLng st = new LatLng(35.623655, 139.724858);
-        googleMap.addMarker(new MarkerOptions().position(st).title("Marker in S"));
+        googleMap.addMarker(new MarkerOptions().position(st).title("スマートテック・ベンチャーズ"));
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(st, 17.0F));
     }
 }
