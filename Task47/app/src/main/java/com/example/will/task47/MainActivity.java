@@ -20,6 +20,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void printToken(){
         String refreshedToken = FirebaseInstanceId.getInstance().getToken();
-        Log.d("notification", refreshedToken);
+        if(refreshedToken != null) {
+            Log.d("notification", refreshedToken);
+        }
     }
 }
