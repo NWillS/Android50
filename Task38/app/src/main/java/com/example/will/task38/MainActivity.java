@@ -1,22 +1,20 @@
 package com.example.will.task38;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.ContentValues;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -25,8 +23,6 @@ import android.widget.Toast;
 
 import java.io.IOException;
 
-import static android.provider.MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE;
-
 public class MainActivity extends AppCompatActivity {
     public static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 123;
     private static final int RESULT_CAMERA = 1001;
@@ -34,7 +30,6 @@ public class MainActivity extends AppCompatActivity {
 
     private Uri cameraUri;
     private boolean permission = false;
-
 
 
     @Override
@@ -49,21 +44,24 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 checkPermission();
-                if(permission) {
-                    String filename = System.currentTimeMillis() + ".jpg";
-                    ContentValues values = new ContentValues();
-                    values.put(MediaStore.Images.Media.TITLE, filename);
-                    values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
-                    cameraUri = getContentResolver().insert(
-                            MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
-                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    intent.putExtra(MediaStore.EXTRA_OUTPUT, cameraUri);
-                    startActivityForResult(intent, RESULT_CAMERA);
+                if (permission) {
+                    openCamera();
                 }
             }
         });
     }
 
+    private void openCamera() {
+        String filename = System.currentTimeMillis() + ".jpg";
+        ContentValues values = new ContentValues();
+        values.put(MediaStore.Images.Media.TITLE, filename);
+        values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
+        cameraUri = getContentResolver().insert(
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, cameraUri);
+        startActivityForResult(intent, RESULT_CAMERA);
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -72,17 +70,40 @@ public class MainActivity extends AppCompatActivity {
                 Bitmap image = MediaStore.Images.Media.getBitmap(this.getContentResolver(), cameraUri);
                 int width = image.getWidth();
                 int height = image.getHeight();
-                if(width > height){
-                    Matrix mat = new Matrix();
-                    mat.postRotate(90);
 
-                    Bitmap bmp = Bitmap.createBitmap(image, 0, 0, width, height, mat, true);
-                    imageView.setImageBitmap(bmp);
-                } else {
-                    imageView.setImageURI(cameraUri);
+                Matrix mat = new Matrix();
+                mat.postRotate(90);
+                String photoPath = getFilePath(cameraUri);
+                if (photoPath == null) {
+                    return;
                 }
+                ExifInterface ei = new ExifInterface(photoPath);
+                int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION,
+                        ExifInterface.ORIENTATION_UNDEFINED);
+
+                Bitmap bitmap = Bitmap.createBitmap(image, 0, 0, width, height, null, false);
+                Bitmap rotatedBitmap = null;
+                switch (orientation) {
+
+                    case ExifInterface.ORIENTATION_ROTATE_90:
+                        rotatedBitmap = rotateImage(bitmap, 90);
+                        break;
+
+                    case ExifInterface.ORIENTATION_ROTATE_180:
+                        rotatedBitmap = rotateImage(bitmap, 180);
+                        break;
+
+                    case ExifInterface.ORIENTATION_ROTATE_270:
+                        rotatedBitmap = rotateImage(bitmap, 270);
+                        break;
+
+                    case ExifInterface.ORIENTATION_NORMAL:
+                    default:
+                        rotatedBitmap = bitmap;
+                }
+                imageView.setImageBitmap(rotatedBitmap);
             } catch (IOException e) {
-                Log.e("System.err",e.getMessage());
+                Log.e("System.err", e.getMessage());
             }
         }
     }
@@ -91,11 +112,11 @@ public class MainActivity extends AppCompatActivity {
         // 既に許可している
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.READ_EXTERNAL_STORAGE)
-                == PackageManager.PERMISSION_GRANTED){
+                == PackageManager.PERMISSION_GRANTED) {
             permission = true;
         }
         // 拒否していた場合
-        else{
+        else {
             requestPermission();
         }
     }
@@ -125,6 +146,7 @@ public class MainActivity extends AppCompatActivity {
 
         }
     }
+
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String[] permissions, int[] grantResults) {
@@ -133,6 +155,7 @@ public class MainActivity extends AppCompatActivity {
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     // do your stuff
                     permission = true;
+                    openCamera();
                 } else {
                 }
                 break;
@@ -140,5 +163,28 @@ public class MainActivity extends AppCompatActivity {
                 super.onRequestPermissionsResult(requestCode, permissions,
                         grantResults);
         }
+    }
+
+    private String getFilePath(Uri uri) {
+        String[] projection = {MediaStore.MediaColumns.DATA};
+        Cursor cursor = getContentResolver().query(uri, projection, null, null, null);
+        if (cursor != null) {
+            String path = null;
+            if (cursor.moveToFirst()) {
+                path = cursor.getString(0);
+            }
+            cursor.close();
+            if (path != null) {
+                return path;
+            }
+        }
+        return null;
+    }
+
+    private Bitmap rotateImage(Bitmap source, float angle) {
+        Matrix matrix = new Matrix();
+        matrix.postRotate(angle);
+        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(),
+                matrix, true);
     }
 }
