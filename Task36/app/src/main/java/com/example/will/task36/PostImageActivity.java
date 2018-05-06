@@ -26,7 +26,7 @@ import com.twitter.sdk.android.core.TwitterSession;
 import com.twitter.sdk.android.tweetcomposer.ComposerActivity;
 import com.twitter.sdk.android.tweetcomposer.TweetUploadService;
 
-public class PostImage extends AppCompatActivity {
+public class PostImageActivity extends AppCompatActivity {
     private Uri myImageUri;
     private Uri m_uri;
     private static final int REQUEST_CHOOSER = 1000;

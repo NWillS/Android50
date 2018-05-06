@@ -22,7 +22,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         String CONSUMER_KEY = getString(R.string.com_twitter_sdk_android_CONSUMER_KEY);
         String CONSUMER_SECRET = getString(R.string.com_twitter_sdk_android_CONSUMER_SECRET);
 
@@ -32,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
                 .debug(true)
                 .build();
         Twitter.initialize(config);
+        super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
 
@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void goNextActivity() {
-        Intent intent = new Intent(getApplication(), PostImage.class);
+        Intent intent = new Intent(getApplication(), PostImageActivity.class);
         startActivity(intent);
     }
 
