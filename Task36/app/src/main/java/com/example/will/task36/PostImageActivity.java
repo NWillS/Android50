@@ -27,10 +27,11 @@ import com.twitter.sdk.android.tweetcomposer.ComposerActivity;
 import com.twitter.sdk.android.tweetcomposer.TweetUploadService;
 
 public class PostImageActivity extends AppCompatActivity {
-    private Uri myImageUri;
     private Uri m_uri;
     private static final int REQUEST_CHOOSER = 1000;
     private ProgressBar progressBar;
+    private boolean garanted = false ;
+    public static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 123;
 
     private BroadcastReceiver myResultReceiver = new BroadcastReceiver() {
         @Override
@@ -63,19 +64,21 @@ public class PostImageActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_image);
-        permission();
+        checkPermission();
 
         registerReceiver(myResultReceiver, new IntentFilter("com.twitter.sdk.android.tweetcomposer.UPLOAD_SUCCESS"));
         registerReceiver(myResultReceiver, new IntentFilter("com.twitter.sdk.android.tweetcomposer.UPLOAD_FAILURE"));
         registerReceiver(myResultReceiver, new IntentFilter("com.twitter.sdk.android.tweetcomposer.TWEET_COMPOSE_CANCEL"));
 
-        progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        progressBar = findViewById(R.id.progressBar);
         Button postButton = findViewById(R.id.postButton);
         postButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                permission();
-                showGallery();
+                checkPermission();
+                if(garanted){
+                    showGallery();
+                }
             }
         });
 
@@ -115,22 +118,6 @@ public class PostImageActivity extends AppCompatActivity {
         startActivityForResult(intent, REQUEST_CHOOSER);
     }
 
-    private void permission() {
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
-
-            // Should we show an explanation?
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-            } else {
-                ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1111);
-
-            }
-        }
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -167,6 +154,9 @@ public class PostImageActivity extends AppCompatActivity {
                     .createIntent();
             startActivity(intent);
             progressBar.setVisibility(View.VISIBLE);
+        } else if (requestCode == MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE){
+            garanted = true;
+            showGallery();
         }
     }
 
@@ -178,5 +168,44 @@ public class PostImageActivity extends AppCompatActivity {
     protected void onDestroy() {
         unregisterReceiver(myResultReceiver);
         super.onDestroy();
+    }
+
+    public void checkPermission() {
+        // 既に許可している
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.READ_EXTERNAL_STORAGE)
+                == PackageManager.PERMISSION_GRANTED) {
+            garanted = true;
+//            showGallery();
+        }
+        // 拒否していた場合
+        else {
+            requestPermission();
+        }
+    }
+
+    // 許可を求める
+    private void requestPermission() {
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
+            }
+
+        } else {
+            Toast toast = Toast.makeText(this,
+                    "許可されないとアプリが実行できません", Toast.LENGTH_SHORT);
+            toast.show();
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,
+                                Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
+            }
+
+        }
     }
 }
