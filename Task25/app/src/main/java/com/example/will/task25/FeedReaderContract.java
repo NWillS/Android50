@@ -1,6 +1,5 @@
 package com.example.will.task25;
 
-
 class FeedReaderContract {
 
     public static class FeedEntry {
