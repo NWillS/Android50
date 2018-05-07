@@ -23,22 +23,29 @@ public class FCMMessageReceiverService extends FirebaseMessagingService {
     public void onMessageReceived(RemoteMessage remoteMessage) {
 
         Log.d("fcm", "received notification");
-        sendNotification(remoteMessage.getNotification().getTitle());
+        sendNotification(remoteMessage.getNotification().getTitle(),remoteMessage.getNotification().getBody());
     }
 
 
-    private void sendNotification(String messageBody) {
+    private void sendNotification(String messageTitle, String messageContent) {
             Intent intent = new Intent(this, MainActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.setFlags(
+                Intent.FLAG_ACTIVITY_CLEAR_TOP  // 起動中のアプリがあってもこちらを優先する
+                        | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED  // 起動中のアプリがあってもこちらを優先する
+                        | Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS  // 「最近利用したアプリ」に表示させない
+                     );
             PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 , intent,
-                    PendingIntent.FLAG_ONE_SHOT);
+                    PendingIntent.FLAG_UPDATE_CURRENT |PendingIntent.FLAG_ONE_SHOT);
 
             Uri defaultSoundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
             Notification notificationBuilder = new NotificationCompat.Builder(this,"TEST")
+                    .setDefaults(Notification.DEFAULT_ALL)
                     .setSmallIcon(R.mipmap.ic_launcher)
-                    .setContentTitle(messageBody)
+                    .setContentTitle(messageTitle)
+                    .setSubText(messageContent)
                     .setAutoCancel(false)
                     .setSound(defaultSoundUri)
+                    .setContentIntent(pendingIntent)
                     .build();
             NotificationManager notificationManager =
                     (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
