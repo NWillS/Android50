@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
 
     private GPSChecker gpsChecker;
     private final int REQUEST_PERMISSION = 1000;
+    private boolean garanted = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +48,9 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 checkPermission();
                 checkGPS();
-                getGPS();
+                if(garanted) {
+                    getGPS();
+                }
             }
         });
     }
@@ -75,6 +78,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void checkGPS(){
         if (!gpsChecker.isGPSEnabled){
+            garanted = false;
             gpsChecker.showSettingsAlert();
         }
     }
@@ -85,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
                 Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED){
 
+            garanted = true;
             gpsChecker = new GPSChecker(this);
         }
         // 拒否していた場合
@@ -116,6 +121,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == REQUEST_PERMISSION){
+            garanted = true;
             gpsChecker = new GPSChecker(this);
         }
     }
