@@ -115,14 +115,16 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == REQUEST_PERMISSION){
-            for(int result : grantResults){
-                if(result != PackageManager.PERMISSION_GRANTED){
-                    return;
+            if(grantResults.length > 0) {
+                for (int result : grantResults) {
+                    if (result != PackageManager.PERMISSION_GRANTED) {
+                        return;
+                    }
                 }
+                garanted = true;
+                gpsChecker = new GPSChecker(this);
+                checkGPS();
             }
-            garanted = true;
-            gpsChecker = new GPSChecker(this);
-            checkGPS();
         }
     }
 }
