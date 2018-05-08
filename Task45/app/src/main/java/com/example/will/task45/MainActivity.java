@@ -1,12 +1,7 @@
 package com.example.will.task45;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.pm.PackageManager;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
-import android.location.LocationProvider;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -16,11 +11,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
-
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -47,7 +37,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 checkPermission();
-                checkGPS();
                 if(garanted) {
                     getGPS();
                 }
@@ -91,6 +80,7 @@ public class MainActivity extends AppCompatActivity {
 
             garanted = true;
             gpsChecker = new GPSChecker(this);
+            checkGPS();
         }
         // 拒否していた場合
         else{
@@ -123,6 +113,7 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == REQUEST_PERMISSION){
             garanted = true;
             gpsChecker = new GPSChecker(this);
+            checkGPS();
         }
     }
 }

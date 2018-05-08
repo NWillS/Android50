@@ -62,46 +62,48 @@ public class GPSChecker implements LocationListener {
 
             if (!isGPSEnabled && !isNetworkEnabled) {
                 // No network provider is enabled
-            } else try{
-                this.canGetLocation = true;
-                if (isNetworkEnabled) {
+            } else {
+                try{
+                    this.canGetLocation = true;
+                    if (isNetworkEnabled) {
 
-                    locationManager.requestLocationUpdates(
-                            LocationManager.NETWORK_PROVIDER,
-                            MIN_TIME_BW_UPDATES,
-                            MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
-                    //   Log.d("Network", "Network");
-                    if (locationManager != null) {
-                        location = locationManager
-                                .getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-                        if (location != null) {
-                            latitude = location.getLatitude();
-                            longitude = location.getLongitude();
-                        }
-                    }
-                }
-                // If GPS enabled, get latitude/longitude using GPS Services
-                if (isGPSEnabled) {
-                    if (location == null) {
                         locationManager.requestLocationUpdates(
-                                LocationManager.GPS_PROVIDER,
+                                LocationManager.NETWORK_PROVIDER,
                                 MIN_TIME_BW_UPDATES,
                                 MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
-                        //    Log.d("GPS Enabled", "GPS Enabled");
+                        //   Log.d("Network", "Network");
                         if (locationManager != null) {
                             location = locationManager
-                                    .getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                                    .getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
                             if (location != null) {
                                 latitude = location.getLatitude();
                                 longitude = location.getLongitude();
                             }
                         }
                     }
+                    // If GPS enabled, get latitude/longitude using GPS Services
+                    if (isGPSEnabled) {
+                        if (location == null) {
+                            locationManager.requestLocationUpdates(
+                                    LocationManager.GPS_PROVIDER,
+                                    MIN_TIME_BW_UPDATES,
+                                    MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
+                            //    Log.d("GPS Enabled", "GPS Enabled");
+                            if (locationManager != null) {
+                                location = locationManager
+                                        .getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                                if (location != null) {
+                                    latitude = location.getLatitude();
+                                    longitude = location.getLongitude();
+                                }
+                            }
+                        }
+                    }
+                }catch (SecurityException ex) {
+                    Log.i("locationManager", "fail to request location update, ignore", ex);
+                } catch (IllegalArgumentException ex) {
+                    Log.d("locationManager", "network provider does not exist, " + ex.getMessage());
                 }
-            }catch (java.lang.SecurityException ex) {
-                Log.i("locationManager", "fail to request location update, ignore", ex);
-            } catch (IllegalArgumentException ex) {
-                Log.d("locationManager", "network provider does not exist, " + ex.getMessage());
             }
         }
         catch (Exception e) {
@@ -192,7 +194,7 @@ public class GPSChecker implements LocationListener {
 
     @Override
     public void onLocationChanged(Location location) {
-
+        getLocation();
     }
 
 
